@@ -1,0 +1,1713 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4ecd8">
+  <meta name="description" content="家族3人でハードコア100日を楽しむ、オリジナルのMinecraft進捗トラッカー">
+  <link rel="icon" href="data:,">
+  <title>ほのそうパパワールド★マスター・オブ・マインクラフト</title>
+  <style id="app-styles">
+:root {
+  color-scheme: light;
+  --ink: #2f2a24;
+  --muted: #71695d;
+  --paper: #fffaf0;
+  --paper-deep: #f4e8cb;
+  --cream: #f4ecd8;
+  --green: #2f7356;
+  --green-dark: #1e503e;
+  --purple: #5d3a9b;
+  --gold: #e6ad37;
+  --blue: #49a9cb;
+  --red: #b65148;
+  --line: #d9caa9;
+  --shadow: 0 10px 28px rgba(58, 43, 25, .13), 0 2px 0 rgba(255,255,255,.75) inset;
+  --radius: 18px;
+  --game-font: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", ui-rounded, "Yu Gothic", "Meiryo", sans-serif;
+  font-family: var(--game-font);
+  font-size: 16px;
+}
+
+* { box-sizing: border-box; }
+html { min-height: 100%; background: var(--cream); scroll-behavior: smooth; }
+body { min-width: 280px; min-height: 100vh; margin: 0; color: var(--ink); background: var(--cream); overflow-x: hidden; }
+button, input, textarea { font: inherit; }
+button { color: inherit; }
+button, [role="button"] { touch-action: manipulation; }
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 4px solid rgba(73,169,203,.45); outline-offset: 2px; }
+[hidden] { display: none !important; }
+.skip-link { position: fixed; z-index: 999; left: 12px; top: -80px; padding: 12px 18px; background: white; border-radius: 12px; }
+.skip-link:focus { top: 12px; }
+
+/* Title screen */
+.start-screen { position: relative; min-height: 100svh; display: grid; place-items: center; overflow: hidden; padding: 28px 18px 42px; background: linear-gradient(#b9e7f3 0 46%, #7fbf77 46% 62%, #49784f 62%); }
+.start-screen::before { content: ""; position: absolute; inset: 0; opacity: .15; background-image: linear-gradient(90deg, rgba(255,255,255,.7) 1px, transparent 1px), linear-gradient(rgba(255,255,255,.7) 1px, transparent 1px); background-size: 32px 32px; }
+.start-sun { position: absolute; width: 94px; height: 94px; right: max(5vw, 28px); top: 8vh; background: #ffe37a; box-shadow: 0 0 0 14px rgba(255,227,122,.24), 0 0 48px #fff8bf; transform: rotate(4deg); }
+.start-cloud { position: absolute; color: rgba(255,255,255,.86); font-size: clamp(38px, 8vw, 78px); filter: drop-shadow(0 7px 0 rgba(83,153,176,.12)); }
+.cloud-one { top: 8%; left: 6%; }
+.cloud-two { top: 22%; right: 8%; transform: scale(.7); }
+.block-hills { position: absolute; inset: auto 0 0; height: 39%; opacity: .9; background: linear-gradient(135deg, transparent 0 14%, #366647 14% 24%, transparent 24%) 0 0/220px 100%, linear-gradient(45deg, #315b40 0 30%, #437a50 30% 52%, #75543b 52% 67%, #496a43 67%) 0 100%/250px 100%; clip-path: polygon(0 46%, 8% 46%, 8% 30%, 19% 30%, 19% 55%, 29% 55%, 29% 18%, 42% 18%, 42% 42%, 55% 42%, 55% 9%, 69% 9%, 69% 52%, 83% 52%, 83% 25%, 94% 25%, 94% 43%, 100% 43%, 100% 100%, 0 100%); }
+.start-card { position: relative; z-index: 2; width: min(740px, 100%); padding: clamp(22px, 5vw, 46px); text-align: center; border: 3px solid #6f4c2d; border-radius: 10px; background: linear-gradient(90deg, rgba(143,93,46,.14) 1px, transparent 1px) 0 0/28px 100%, linear-gradient(#f9e2a8, #edc777); box-shadow: 0 8px 0 #4c3829, 0 18px 50px rgba(22,42,26,.35), inset 0 0 0 7px rgba(255,249,218,.55); }
+.start-card::before, .start-card::after { content: "✦"; position: absolute; top: 16px; color: #a46a29; font-size: 22px; }
+.start-card::before { left: 18px; }
+.start-card::after { right: 18px; }
+.logo-kicker { display: inline-flex; gap: 8px; align-items: center; margin: 0 0 12px; padding: 7px 14px; border-radius: 999px; color: #fff8dc; background: #2f7356; font-size: .78rem; font-weight: 900; letter-spacing: .12em; box-shadow: 0 4px 0 #1e503e; }
+.game-title { margin: 0 auto; max-width: 680px; color: #3a2d22; font-family: var(--game-font); font-weight: 1000; line-height: 1.08; text-wrap: balance; text-shadow: 0 3px 0 #fff0bb, 0 5px 0 rgba(88,62,35,.12); }
+.game-title span { display: block; font-size: clamp(1.35rem, 4vw, 2.05rem); }
+.game-title strong { display: block; margin-top: 8px; color: var(--purple); font-size: clamp(2rem, 7vw, 4rem); letter-spacing: -.04em; }
+.title-star { display: inline !important; color: #d18a15; }
+.start-subtitle { margin: 18px auto 22px; max-width: 520px; line-height: 1.75; font-weight: 700; color: #624e35; }
+.start-players { display: flex; justify-content: center; align-items: end; gap: clamp(12px, 5vw, 32px); margin: 14px 0 25px; }
+.start-player { position: relative; display: grid; justify-items: center; gap: 5px; }
+.start-player .avatar { display: grid; place-items: center; width: clamp(64px, 13vw, 92px); aspect-ratio: 1; border: 4px solid #fff8df; border-radius: 14px; background: var(--player); box-shadow: 0 6px 0 color-mix(in srgb, var(--player) 62%, #000), 0 10px 20px rgba(65,43,26,.2); font-size: clamp(32px, 7vw, 48px); }
+.start-player b { padding: 4px 10px; border-radius: 999px; background: rgba(255,250,232,.9); font-size: .8rem; }
+.start-actions { display: grid; justify-items: center; gap: 12px; }
+.start-button { min-width: min(360px, 100%); min-height: 62px; padding: 14px 24px; border: 0; border-radius: 13px; color: #fff; background: linear-gradient(#4b956b, #2f7356); box-shadow: 0 6px 0 var(--green-dark), 0 12px 22px rgba(30,80,62,.28); font-size: 1.15rem; font-weight: 900; cursor: pointer; transition: transform .16s, box-shadow .16s; }
+.start-button:hover { transform: translateY(-2px); box-shadow: 0 8px 0 var(--green-dark), 0 14px 24px rgba(30,80,62,.3); }
+.start-button:active { transform: translateY(5px); box-shadow: 0 1px 0 var(--green-dark); }
+.start-note { margin: 5px 0 0; color: #624e35; font-size: .78rem; font-weight: 700; }
+
+/* App shell */
+.app-shell { min-height: 100vh; padding-bottom: 88px; background: radial-gradient(circle at 15px 15px, rgba(112,92,54,.06) 2px, transparent 2px) 0 0/30px 30px, var(--cream); }
+.app-header { position: sticky; z-index: 50; top: 0; display: flex; align-items: center; justify-content: space-between; min-height: 64px; padding: 8px max(16px, env(safe-area-inset-left)); border-bottom: 1px solid #d8c79e; background: rgba(255,250,240,.94); backdrop-filter: blur(12px); }
+.storage-alert { position: sticky; z-index: 49; top: 64px; display: flex; align-items: center; justify-content: center; gap: 14px; padding: 10px 16px; border-bottom: 2px solid #b65148; color: #662b27; background: #fff0ed; box-shadow: 0 4px 12px rgba(78,38,34,.15); font-size: .78rem; }
+.storage-alert > div { display: flex; flex: 0 0 auto; gap: 7px; }
+.storage-alert button { min-height: 44px; padding: 7px 12px; border: 1px solid #b65148; border-radius: 10px; color: #762f2a; background: white; font-weight: 900; cursor: pointer; }
+.mini-brand { display: flex; align-items: center; gap: 10px; border: 0; background: transparent; cursor: pointer; text-align: left; }
+.mini-brand .brand-cube { display: grid; place-items: center; width: 42px; height: 42px; border: 2px solid #315c42; border-radius: 9px; color: white; background: #4a8358; box-shadow: inset 0 -8px rgba(30,80,62,.25), 0 3px 0 #244a35; font-size: 20px; }
+.mini-brand b { display: block; color: var(--purple); font-family: var(--game-font); font-size: .95rem; font-weight: 950; }
+.mini-brand small { display: block; color: var(--muted); font-weight: 700; }
+.header-stats { display: flex; align-items: center; gap: 7px; }
+.header-pill { display: grid; min-width: 64px; min-height: 44px; place-content: center; padding: 5px 10px; border: 1px solid var(--line); border-radius: 12px; background: white; text-align: center; }
+.header-pill strong { color: var(--green); font-size: .9rem; }
+.header-pill small { color: var(--muted); font-size: .63rem; }
+.main-content { width: min(1180px, 100%); min-height: calc(100vh - 140px); margin: auto; padding: clamp(18px, 4vw, 38px) clamp(14px, 3.5vw, 32px) 42px; outline: 0; }
+.view { animation: page-in .28s ease both; }
+@keyframes page-in { from { opacity: 0; transform: translateY(8px); } }
+.paper-card { border: 1px solid var(--line); border-radius: var(--radius); background: linear-gradient(145deg, #fffdf7, var(--paper)); box-shadow: var(--shadow); }
+.eyebrow { margin: 0 0 5px; color: var(--green); font-size: .7rem; font-weight: 950; letter-spacing: .15em; text-transform: uppercase; }
+h1, h2, h3, p { overflow-wrap: anywhere; }
+h1 { margin: 0; font-family: var(--game-font); font-size: clamp(1.75rem, 5vw, 2.7rem); font-weight: 950; line-height: 1.18; letter-spacing: .01em; }
+h2 { margin: 0; font-size: 1.15rem; }
+p { line-height: 1.65; }
+.muted { color: var(--muted); }
+
+.day-hero { position: relative; display: grid; gap: 22px; padding: clamp(20px, 5vw, 36px); overflow: hidden; }
+.day-hero::after { content: "✦"; position: absolute; right: -18px; bottom: -42px; color: rgba(230,173,55,.13); font-size: 150px; transform: rotate(14deg); }
+.day-hero > div:first-child { position: relative; z-index: 1; }
+.day-hero p:not(.eyebrow) { margin: 8px 0 0; color: var(--muted); font-weight: 700; }
+.day-control { position: relative; z-index: 1; display: grid; grid-template-columns: 54px minmax(100px, 1fr) 54px; align-items: center; gap: 8px; min-width: 0; padding: 8px; border: 2px solid #d5bd86; border-radius: 16px; background: #fff6d9; }
+.day-control button { width: 54px; height: 54px; border: 0; border-radius: 13px; color: white; background: var(--green); box-shadow: 0 4px 0 var(--green-dark); font-size: 1.8rem; font-weight: 900; cursor: pointer; }
+.day-control button:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--green-dark); }
+.day-control div { display: grid; justify-items: center; min-width: 0; }
+.day-control strong { color: var(--purple); font-size: 2rem; line-height: 1; }
+.day-control span { color: var(--muted); font-size: .72rem; font-weight: 800; white-space: nowrap; }
+.day-panel { display: grid; gap: 9px; min-width: 0; }
+.day-progress { height: 9px; overflow: hidden; border: 1px solid #d5bd86; border-radius: 999px; background: #e8dcc1; }
+.day-progress span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--green), #86bd70, var(--gold)); transition: width .22s ease; }
+.dashboard-grid { display: grid; gap: 15px; margin: 16px 0 30px; }
+.overall-card, .family-card { display: flex; align-items: center; gap: 18px; min-width: 0; padding: 20px; }
+.overall-card p, .family-card p { margin: 6px 0 0; color: var(--muted); font-size: .86rem; }
+.progress-ring { flex: 0 0 108px; display: grid; place-items: center; width: 108px; height: 108px; border-radius: 50%; background: conic-gradient(var(--green) var(--progress), #e7ddc5 0); box-shadow: inset 0 0 0 1px #d5c59f; }
+.progress-ring div { display: grid; place-items: center; width: 82px; height: 82px; border-radius: 50%; background: var(--paper); }
+.progress-ring strong { color: var(--green); font-size: 1.35rem; }
+.progress-ring span { font-size: .62rem; font-weight: 800; }
+.family-card { align-items: stretch; flex-direction: column; }
+.family-row { display: flex; justify-content: space-around; gap: 8px; }
+.family-member { display: grid; flex: 1; justify-items: center; gap: 5px; }
+.family-member span { display: grid; place-items: center; width: 52px; height: 52px; border: 3px solid color-mix(in srgb, var(--player) 75%, #fff); border-radius: 13px; background: color-mix(in srgb, var(--player) 17%, #fff); font-size: 27px; }
+.family-member b { font-size: .72rem; }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin: 30px 2px 12px; }
+.text-button { min-height: 44px; border: 0; color: var(--green); background: transparent; font-weight: 900; cursor: pointer; }
+.quest-stack, .board-list { display: grid; gap: 11px; }
+.quest-card { position: relative; display: grid; grid-template-columns: 54px minmax(0, 1fr) 52px; align-items: stretch; min-height: 96px; border: 1px solid var(--line); border-radius: 16px; background: #fffdf7; box-shadow: 0 4px 14px rgba(70,51,30,.08); overflow: hidden; transition: border-color .2s, transform .2s, background .2s; }
+.quest-card:hover { border-color: #bca46e; transform: translateY(-1px); }
+.quest-card.is-done { border-color: #80ad8d; background: linear-gradient(90deg, #e8f4e7, #fffdf7 44%); }
+.quest-check { align-self: center; justify-self: center; display: grid; place-items: center; width: 46px; height: 46px; border: 2px solid #b7aa8f; border-radius: 11px; color: white; background: white; font-size: 1.35rem; font-weight: 950; cursor: pointer; }
+.is-done .quest-check { border-color: var(--green); background: var(--green); box-shadow: 0 3px 0 var(--green-dark); }
+.quest-main { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; gap: 6px 10px; min-width: 0; padding: 9px 4px; text-align: left; }
+.quest-icon { grid-row: 1 / span 2; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--paper-deep); font-size: 24px; }
+.quest-copy { min-width: 0; display: grid; gap: 6px; }
+.quest-title { font-weight: 900; line-height: 1.35; }
+.is-done .quest-title { color: #3f634c; }
+.quest-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+.quest-meta small { color: var(--muted); font-size: .66rem; font-weight: 700; }
+.safety { display: inline-flex; align-items: center; min-height: 24px; padding: 3px 8px; border-radius: 999px; font-size: .62rem; font-style: normal; font-weight: 900; }
+.safety-low { color: #276145; background: #dff0df; }
+.safety-mid { color: #75520a; background: #ffedb4; }
+.safety-high { color: #8b4125; background: #ffe0c8; }
+.card-side-actions { display: grid; align-content: center; justify-items: center; gap: 1px; }
+.goal-star, .favorite-heart { width: 46px; height: 46px; border: 0; background: transparent; font-size: 1.35rem; cursor: pointer; }
+.goal-star { color: #c8bfa8; }
+.goal-star.active { color: var(--gold); filter: drop-shadow(0 2px 0 #9f6812); }
+.favorite-heart { color: #c9c0b4; }
+.favorite-heart.active { color: #b65172; filter: drop-shadow(0 2px 0 #7d2f4b); }
+.hint-button { min-width: 68px; min-height: 46px; padding: 6px 8px; border: 1px solid #d8be78; border-radius: 11px; color: #72520d; background: #fff4c9; font-size: .7rem; font-weight: 900; cursor: pointer; }
+.hint-button span { display: inline-block; margin-right: 2px; }
+.card-players { grid-column: 2; display: flex; margin: 0; padding-left: 5px; }
+.mini-player { display: inline-grid; place-items: center; width: 28px; height: 28px; margin-left: -5px; border: 2px solid #fff; border-radius: 50%; background: color-mix(in srgb, var(--player) 20%, #fff); font-size: 15px; }
+.category-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.category-tile { min-width: 0; min-height: 138px; padding: 16px 12px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); box-shadow: 0 4px 12px rgba(70,51,30,.08); cursor: pointer; text-align: left; }
+.category-tile > span { font-size: 25px; }
+.category-tile > b { display: block; margin-top: 8px; }
+.category-tile > small { color: var(--muted); font-weight: 800; }
+.bar-wrap { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 7px; margin-top: 9px; }
+.bar { height: 7px; border-radius: 99px; background: #ded4bb; overflow: hidden; }
+.bar span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #4b9367, #75b17f); }
+.bar-wrap > b { color: var(--green); font-size: .65rem; }
+
+/* Pages and filters */
+.page-title { display: flex; align-items: end; justify-content: space-between; gap: 14px; margin: 4px 2px 22px; }
+.page-title p:not(.eyebrow) { margin: 8px 0 0; color: var(--muted); font-weight: 650; }
+.result-count { flex: 0 0 auto; display: grid; place-items: center; min-width: 66px; min-height: 66px; padding: 7px; border: 1px solid #cfbc8f; border-radius: 14px; background: #fff6d9; }
+.result-count strong { color: var(--purple); font-size: 1.35rem; }
+.result-count span { color: var(--muted); font-size: .65rem; font-weight: 800; }
+.filter-panel { position: sticky; z-index: 20; top: 72px; display: grid; gap: 11px; margin-bottom: 16px; padding: 13px; }
+.search-box { display: flex; align-items: center; min-height: 50px; padding: 0 13px; border: 2px solid #d7c7a5; border-radius: 13px; background: white; }
+.search-box span { color: var(--green); font-size: 1.45rem; font-weight: 900; }
+.search-box input { min-width: 0; width: 100%; height: 44px; padding: 0 8px; border: 0; outline: 0; color: var(--ink); background: transparent; }
+.chip-scroll { display: flex; gap: 7px; padding: 2px; overflow-x: auto; scrollbar-width: none; }
+.chip-scroll::-webkit-scrollbar { display: none; }
+.filter-chip { flex: 0 0 auto; min-height: 46px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: white; font-size: .78rem; font-weight: 850; cursor: pointer; }
+.filter-chip.active { border-color: var(--green); color: white; background: var(--green); }
+.segmented { display: grid; grid-template-columns: repeat(5, 1fr); padding: 4px; border-radius: 12px; background: #e8dec6; }
+.segmented button { min-width: 0; min-height: 46px; padding: 6px 3px; border: 0; border-radius: 9px; background: transparent; font-size: .68rem; font-weight: 850; cursor: pointer; }
+.segmented button.active { color: var(--green-dark); background: white; box-shadow: 0 2px 8px rgba(70,51,30,.12); }
+.empty-state { display: grid; justify-items: center; gap: 8px; padding: 50px 20px; border: 2px dashed #ccb98e; border-radius: 18px; color: var(--muted); background: rgba(255,250,240,.58); text-align: center; }
+.empty-state > span { font-size: 42px; }
+.empty-state b { color: var(--ink); font-size: 1.08rem; }
+.empty-state p { margin: 0; }
+.tip-banner { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; padding: 13px 16px; border: 1px solid #e5c779; border-radius: 14px; background: #fff3c8; }
+.tip-banner span { font-size: 25px; }
+.tip-banner p { margin: 0; font-size: .82rem; font-weight: 750; }
+
+/* Memories */
+.timeline { display: grid; gap: 12px; }
+.memory-card { display: grid; grid-template-columns: 74px 48px minmax(0, 1fr) 44px; align-items: center; gap: 9px; padding: 13px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); box-shadow: 0 4px 14px rgba(70,51,30,.08); }
+.memory-day { display: grid; align-self: stretch; align-content: center; padding-right: 8px; border-right: 1px dashed #cdbd98; }
+.memory-day strong { color: var(--purple); font-size: .72rem; }
+.memory-day span { color: var(--muted); font-size: .58rem; }
+.memory-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--paper-deep); font-size: 24px; }
+.memory-copy { min-width: 0; }
+.memory-copy h2 { font-size: .92rem; }
+.memory-copy p { margin: 5px 0 0; color: var(--muted); font-size: .72rem; }
+.memory-card > button { width: 44px; height: 46px; border: 0; border-radius: 11px; color: var(--green); background: transparent; font-size: 1.25rem; cursor: pointer; }
+
+/* Settings */
+.settings-grid { display: grid; gap: 14px; }
+.settings-card { padding: 18px; }
+.settings-card > h2 { margin-bottom: 13px; }
+.settings-card > p { color: var(--muted); font-size: .82rem; }
+.toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 68px; border-top: 1px solid #e4d8bd; cursor: pointer; }
+.toggle-row span { display: grid; gap: 3px; }
+.toggle-row small { color: var(--muted); font-size: .68rem; }
+.toggle-row input { position: absolute; opacity: 0; pointer-events: none; }
+.toggle-row i { position: relative; flex: 0 0 54px; width: 54px; height: 32px; border-radius: 999px; background: #c8c0ae; transition: background .2s; }
+.toggle-row i::after { content: ""; position: absolute; width: 24px; height: 24px; left: 4px; top: 4px; border-radius: 50%; background: white; box-shadow: 0 2px 5px rgba(0,0,0,.2); transition: transform .2s; }
+.toggle-row input:checked + i { background: var(--green); }
+.toggle-row input:checked + i::after { transform: translateX(22px); }
+.toggle-row input:focus-visible + i { outline: 4px solid rgba(73,169,203,.45); }
+.button-row { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.primary-button, .secondary-button, .danger-button { min-height: 50px; padding: 10px 16px; border-radius: 12px; font-weight: 900; cursor: pointer; }
+.primary-button { border: 0; color: white; background: var(--green); box-shadow: 0 4px 0 var(--green-dark); }
+.primary-button.small { min-height: 44px; }
+.secondary-button { border: 2px solid #bca772; color: #604c2d; background: #fff8e4; }
+.danger-button { width: 100%; border: 2px solid #c66a61; color: #8f352f; background: #fff0ed; }
+.danger-link { min-height: 44px; border: 0; color: #a8463e; background: transparent; font-weight: 850; cursor: pointer; }
+.save-label { display: block; margin-top: 12px; color: var(--green); font-weight: 800; }
+.save-label.save-error { color: var(--red); }
+.setting-player { display: grid; grid-template-columns: 48px 1fr 24px; align-items: center; gap: 10px; min-height: 58px; border-top: 1px solid #e4d8bd; }
+.setting-player span { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 11px; background: color-mix(in srgb, var(--player) 18%, #fff); font-size: 24px; }
+.setting-player i { width: 20px; height: 20px; border: 2px solid white; border-radius: 50%; box-shadow: 0 0 0 1px #ab9d7f; }
+.danger-card { border-color: #e4ada7; }
+.safety-note { margin: 20px auto 0; max-width: 720px; padding: 12px 14px; border: 1px solid #dfc66f; border-radius: 12px; color: #685114; background: #fff7d8; font-size: .75rem; }
+.disclaimer { margin: 24px auto 0; max-width: 650px; color: var(--muted); font-size: .67rem; text-align: center; }
+
+/* Dialog and feedback */
+dialog { width: min(620px, calc(100% - 20px)); max-height: min(780px, calc(100dvh - 20px)); padding: 0; border: 0; border-radius: 20px; background: transparent; box-shadow: 0 24px 80px rgba(24,29,24,.38); }
+dialog::backdrop { background: rgba(25,35,29,.66); backdrop-filter: blur(4px); }
+.dialog-card { position: relative; max-height: calc(100dvh - 20px); overflow: auto; border: 2px solid #c9b27d; border-radius: 20px; background: var(--paper); }
+.dialog-close { position: absolute; z-index: 2; right: 10px; top: 10px; width: 46px; height: 46px; border: 0; border-radius: 50%; background: rgba(255,255,255,.85); font-size: 1.5rem; cursor: pointer; }
+.dialog-hero { display: flex; align-items: center; gap: 14px; padding: 22px 62px 22px 22px; color: white; background: linear-gradient(135deg, #366e51, #5d3a9b); }
+.dialog-hero > span { display: grid; place-items: center; flex: 0 0 58px; width: 58px; height: 58px; border-radius: 15px; background: rgba(255,255,255,.18); font-size: 32px; }
+.dialog-hero p { margin: 0 0 3px; font-size: .7rem; font-weight: 800; opacity: .8; }
+.dialog-hero h2 { font-size: 1.28rem; }
+.dialog-body { padding: 20px; }
+.dialog-body h3 { margin: 20px 0 6px; font-size: .9rem; }
+.dialog-body > p { margin: 0; color: var(--muted); }
+.hint-section, .unlock-section, .prepare-section { margin-top: 14px; padding: 14px 15px; border: 1px solid #dfcfaa; border-radius: 14px; background: #fffdf7; }
+.hint-section { border-color: #dfc66f; background: #fff7d8; }
+.unlock-section { border-color: #b9d5bd; background: #edf7ea; }
+.prepare-section { border-color: #e2bd95; background: #fff0df; }
+.hint-section h3, .unlock-section h3, .prepare-section h3 { margin: 0 0 7px; }
+.hint-section p, .unlock-section p, .prepare-section p { margin: 0; color: #574f43; line-height: 1.7; }
+.prepare-section ul { margin: 0; padding-left: 1.25rem; color: #574f43; line-height: 1.7; }
+.recovery-card { max-width: 620px; }
+.recovery-card .dialog-body > p { margin-top: 0; color: #574f43; }
+.recovery-options { display: grid; gap: 10px; margin: 18px 0 14px; }
+.recovery-card small { display: block; color: var(--muted); line-height: 1.6; }
+.player-select { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.player-select input { position: absolute; opacity: 0; }
+.player-select span { display: grid; justify-items: center; gap: 4px; min-height: 76px; padding: 9px 4px; border: 2px solid #d8cbb0; border-radius: 13px; background: white; font-size: 27px; cursor: pointer; }
+.player-select span b { font-size: .68rem; }
+.player-select input:checked + span { border-color: var(--player); background: color-mix(in srgb, var(--player) 13%, #fff); box-shadow: inset 0 0 0 2px white; }
+.player-select input:focus-visible + span { outline: 4px solid rgba(73,169,203,.45); }
+.note-field { display: grid; gap: 7px; margin-top: 20px; }
+.note-field textarea { width: 100%; min-height: 100px; padding: 12px; border: 2px solid #d8cbb0; border-radius: 12px; color: var(--ink); background: white; resize: vertical; }
+.dialog-actions { position: sticky; bottom: 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 13px 20px 18px; border-top: 1px solid #e3d6b9; background: rgba(255,250,240,.96); }
+.dialog-actions .primary-button { min-width: 150px; }
+.toast { position: fixed; z-index: 200; left: 50%; bottom: calc(92px + env(safe-area-inset-bottom)); max-width: calc(100% - 28px); padding: 12px 18px; border: 2px solid #fff4c8; border-radius: 999px; color: white; background: #2d5e47; box-shadow: 0 8px 28px rgba(20,41,31,.3); font-weight: 850; text-align: center; opacity: 0; pointer-events: none; transform: translate(-50%, 20px); transition: .25s; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.quest-card.quest-celebrate { animation: quest-pop .42s ease both; }
+.card-sparkles { position: absolute; z-index: 3; right: 50px; top: 4px; display: flex; gap: 5px; color: #d39313; pointer-events: none; }
+.card-sparkles i { font-style: normal; animation: sparkle-up .72s ease-out both; }
+.card-sparkles i:nth-child(2) { animation-delay: .08s; }
+.card-sparkles i:nth-child(3) { animation-delay: .16s; }
+@keyframes quest-pop { 50% { transform: translateY(-2px) scale(1.012); box-shadow: 0 8px 22px rgba(66,116,77,.2); } }
+@keyframes sparkle-up { from { opacity: 0; transform: translateY(12px) scale(.5); } 45% { opacity: 1; } to { opacity: 0; transform: translateY(-17px) scale(1.15) rotate(18deg); } }
+
+/* Bottom navigation */
+.bottom-nav { position: fixed; z-index: 60; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(5, 1fr); min-height: calc(72px + env(safe-area-inset-bottom)); padding: 5px max(5px, env(safe-area-inset-left)) env(safe-area-inset-bottom); border-top: 1px solid #cdbd97; background: rgba(255,251,241,.97); backdrop-filter: blur(14px); box-shadow: 0 -8px 24px rgba(62,47,28,.08); }
+.nav-button { position: relative; display: grid; place-items: center; align-content: center; gap: 3px; min-width: 0; min-height: 60px; padding: 5px 2px; border: 0; border-radius: 12px; color: #7b7466; background: transparent; cursor: pointer; }
+.nav-button span { font-size: 1.35rem; line-height: 1; }
+.nav-button small { font-size: .62rem; font-weight: 850; }
+.nav-button.active { color: var(--green-dark); background: #e4f0e2; }
+.nav-button.active::after { content: ""; position: absolute; top: 4px; width: 22px; height: 3px; border-radius: 9px; background: var(--green); }
+
+.large-text { font-size: 18px; }
+.reduce-motion *, .reduce-motion *::before, .reduce-motion *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+
+@media (min-width: 680px) {
+  .day-hero { grid-template-columns: 1fr minmax(290px, .65fr); align-items: center; }
+  .dashboard-grid { grid-template-columns: 1.1fr .9fr; }
+  .category-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .board-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .settings-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  .filter-panel { grid-template-columns: minmax(260px, .8fr) 1.2fr; align-items: center; }
+  .segmented { grid-column: 1 / -1; }
+  .quest-card.compact { min-height: 86px; }
+}
+
+@media (min-width: 1020px) {
+  .app-shell { padding-bottom: 30px; padding-left: 102px; }
+  .app-header { padding-left: 124px; }
+  .bottom-nav { top: 0; right: auto; width: 102px; min-height: 100vh; grid-template-columns: 1fr; grid-template-rows: repeat(5, 78px); align-content: center; padding: 14px; border-top: 0; border-right: 1px solid #cdbd97; box-shadow: 8px 0 24px rgba(62,47,28,.06); }
+  .nav-button { min-height: 70px; }
+  .nav-button.active::after { top: auto; left: 3px; width: 3px; height: 24px; }
+  .toast { bottom: 34px; }
+  .filter-panel { top: 76px; grid-template-columns: minmax(280px, .8fr) 1.15fr .9fr; }
+  .segmented { grid-column: auto; }
+  .category-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
+@media (max-width: 420px) {
+  :root { font-size: 15px; }
+  .start-screen { padding-inline: 11px; }
+  .start-card { padding-inline: 15px; }
+  .start-subtitle { line-height: 1.55; }
+  .start-player .avatar { border-width: 3px; }
+  .mini-brand b { max-width: 125px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .header-pill:last-child { display: none; }
+  .overall-card { align-items: flex-start; }
+  .progress-ring { flex-basis: 92px; width: 92px; height: 92px; }
+  .progress-ring div { width: 68px; height: 68px; }
+  .storage-alert { align-items: stretch; flex-direction: column; gap: 6px; }
+  .storage-alert > div { display: grid; grid-template-columns: 1fr 1fr; }
+  .quest-card { grid-template-columns: 48px minmax(0, 1fr) 46px; }
+  .quest-main { grid-template-columns: 36px minmax(0, 1fr); gap: 5px 8px; }
+  .quest-icon { width: 36px; height: 36px; font-size: 21px; }
+  .hint-button { grid-column: 2; justify-self: start; min-width: 82px; }
+  .card-players { display: none; }
+  .memory-card { grid-template-columns: 63px 40px minmax(0, 1fr) 44px; padding-inline: 9px; }
+  .memory-icon { width: 38px; height: 38px; font-size: 21px; }
+  .page-title p:not(.eyebrow) { font-size: .8rem; }
+}
+
+@media (max-width: 679px) {
+  dialog { width: 100%; max-width: none; max-height: 92dvh; margin: auto 0 0; border-radius: 22px 22px 0 0; }
+  .dialog-card { max-height: 92dvh; border-radius: 22px 22px 0 0; border-bottom: 0; }
+  .dialog-actions { padding-bottom: max(18px, env(safe-area-inset-bottom)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">本編へ移動</a>
+
+  <section id="start-screen" class="start-screen" aria-labelledby="game-title">
+    <div class="start-sun" aria-hidden="true"></div>
+    <div class="start-cloud cloud-one" aria-hidden="true">☁</div>
+    <div class="start-cloud cloud-two" aria-hidden="true">☁</div>
+    <div class="block-hills" aria-hidden="true"></div>
+    <main class="start-card">
+      <p class="logo-kicker"><span>🧭</span> FAMILY ADVENTURE BOARD</p>
+      <h1 id="game-title" class="game-title">
+        <span>ほのそうパパワールド<span class="title-star">★</span></span>
+        <strong>マスター・オブ・<br>マインクラフト</strong>
+      </h1>
+      <p class="start-subtitle">3人で100日を生きぬきながら、<br>つくる・あつめる・みつけるを楽しもう！</p>
+      <div class="start-players" aria-label="冒険する家族">
+        <div class="start-player" style="--player:#7d4bc6"><span class="avatar" aria-hidden="true">👧</span><b>ほのちゃん</b></div>
+        <div class="start-player" style="--player:#26232b"><span class="avatar" aria-hidden="true">👦</span><b>そうくん</b></div>
+        <div class="start-player" style="--player:#49a9cb"><span class="avatar" aria-hidden="true">👨‍🏫</span><b>パパ</b></div>
+      </div>
+      <div class="start-actions">
+        <button id="start-button" class="start-button" type="button"><span>★</span> 冒険をはじめる</button>
+        <p class="start-note">🔒 記録はこのブラウザの中に保存されます</p>
+      </div>
+    </main>
+  </section>
+
+  <div id="app-shell" class="app-shell" hidden>
+    <header class="app-header">
+      <button class="mini-brand" type="button" data-view="home" aria-label="家族のわくわく冒険ひろばへ">
+        <span class="brand-cube" aria-hidden="true">★</span>
+        <span><b>ほのそうパパワールド</b><small>100 DAYS ADVENTURE</small></span>
+      </button>
+      <div class="header-stats" aria-label="現在の進捗">
+        <span class="header-pill"><strong id="header-day">1日目</strong><small>ワールド</small></span>
+        <span class="header-pill"><strong id="header-score">0/200</strong><small>できた！</small></span>
+      </div>
+    </header>
+
+    <div id="storage-alert" class="storage-alert" role="alert" hidden>
+      <span>⚠️ <b>記録を保存できていません。</b> このページを閉じる前に再試行してください。</span>
+      <div>
+        <button type="button" data-action="retry-save">再試行</button>
+        <button type="button" data-action="export">バックアップ</button>
+      </div>
+    </div>
+
+    <main id="main-content" class="main-content" tabindex="-1"></main>
+
+    <nav class="bottom-nav" aria-label="メインメニュー">
+      <button class="nav-button active" type="button" data-view="home"><span aria-hidden="true">🏠</span><small>ホーム</small></button>
+      <button class="nav-button" type="button" data-view="board"><span aria-hidden="true">🗺️</span><small>進捗</small></button>
+      <button class="nav-button" type="button" data-view="goals"><span aria-hidden="true">⭐</span><small>今日</small></button>
+      <button class="nav-button" type="button" data-view="memories"><span aria-hidden="true">📖</span><small>思い出</small></button>
+      <button class="nav-button" type="button" data-view="settings"><span aria-hidden="true">⚙️</span><small>設定</small></button>
+    </nav>
+  </div>
+
+  <dialog id="quest-dialog" aria-label="進捗のヒントと記録"></dialog>
+  <dialog id="recovery-dialog" aria-labelledby="recovery-title"></dialog>
+  <input id="recovery-import-file" type="file" accept="application/json,.json" hidden>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <noscript><p style="padding:2rem;text-align:center">このアプリを遊ぶには、ブラウザのJavaScriptを有効にしてください。</p></noscript>
+
+  <script id="inline-config">
+const CONFIG = Object.freeze({
+  appTitle: "ほのそうパパワールド★マスター・オブ・マインクラフト",
+  mainColor: "#5d3a9b",
+  backgroundColor: "#f4ecd8"
+});
+  </script>
+  <script id="app-script">
+(function () {
+  'use strict';
+
+  const APP_ID = 'honosou-papa-minecraft-tracker';
+  const STORAGE_KEY = `${APP_ID}:state:v1`;
+  const RECOVERY_KEY_PREFIX = `${APP_ID}:recovery:`;
+  const SAFETY = Object.freeze({ A: 'あんしん', B: 'じゅんびして冒険', C: 'しっかりそなえて挑戦' });
+  const PHASE = Object.freeze({
+    1: 'はじめの一歩',
+    2: '暮らしを豊かに',
+    3: '世界を広げる',
+    4: 'こだわりの村づくり',
+    5: '100日の集大成'
+  });
+  const PLAYERS = Object.freeze([
+    { id: 'hono', name: 'ほのちゃん', color: '#7d4bc6', icon: '👧' },
+    { id: 'sou', name: 'そうくん', color: '#26232b', icon: '👦' },
+    { id: 'papa', name: 'パパ', color: '#49a9cb', icon: '👨‍🏫' }
+  ]);
+
+  function emojiFor(title, category) {
+    const rules = [
+      [/赤ちゃん|卵/, '🐣'], [/牛|牛乳/, '🐄'], [/ヒツジ|羊毛/, '🐑'], [/ブタ/, '🐷'], [/ニワトリ/, '🐔'],
+      [/ウマ|馬/, '🐴'], [/ロバ|ラバ/, '🫏'], [/ネコ/, '🐈'], [/オオカミ/, '🐺'], [/カメ/, '🐢'],
+      [/ウーパールーパー/, '🫧'], [/ミツバチ|ハチミツ|ハニカム/, '🐝'], [/ヤギ/, '🐐'], [/キツネ/, '🦊'], [/ラクダ/, '🐪'], [/パンダ/, '🐼'],
+      [/花|タンポポ|染料/, '🌷'], [/木|原木|苗木|板材|森林|タイガ|サクラ/, '🌳'], [/畑|小麦|ニンジン|ジャガイモ|カボチャ|スイカ|サトウキビ|カカオ/, '🌱'],
+      [/魚|釣り|水槽/, '🐟'], [/海|海岸|船|ボート|川|池|水|氷/, '🌊'], [/村|取引/, '🏘️'], [/砂漠|砂|荒野/, '🏜️'], [/雪|イグルー/, '❄️'],
+      [/洞窟|鍾乳|石|丸石|方解石|鉱|鉄|銅|金|ダイヤ|アメジスト|硫黄|辰砂/, '🪨'], [/地図|製図|座標|コンパス/, '🗺️'],
+      [/ベッド|寝室/, '🛏️'], [/盾|防具|手すり|柵|壁/, '🛡️'], [/松明|ランタン|ろうそく|明る|街灯/, '🏮'],
+      [/旗/, '🚩'], [/ガラス|窓/, '🪟'], [/本|書見台|読書/, '📚'], [/料理|パン|ケーキ|パイ|シチュー|クッキー|食料|かまど|燻製器/, '🍞'],
+      [/チェスト|樽|収納/, '📦'], [/作業台|台|金床|砥石|大釜|ホッパー|ピストン|レール|トロッコ|自動/, '🛠️'],
+      [/家|拠点|屋根|建物|温室|ベランダ|橋|噴水|記念/, '🏠'], [/部屋|カーペット|飾|花壇|小道|入口/, '🎨'],
+      [/宝|エメラルド|ダイヤ/, '💎'], [/キノコ/, '🍄'], [/沼地|マングローブ/, '🌿'], [/望遠鏡/, '🔭'], [/時計/, '🕰️']
+    ];
+    const match = rules.find(([pattern]) => pattern.test(title));
+    return match ? match[1] : ({ つくる: '🔨', あつめる: '🎒', みつける: '🧭', そだてる: '🌱', かざる: '🎨', まもる: '🛡️' }[category] || '⭐');
+  }
+
+  function unlocksFor(title, category) {
+    const rules = [
+      [/作業台/, 'ほとんどの道具や設備をクラフトできるようになるよ。'],
+      [/かまど|溶鉱炉|燻製器|自動かまど/, '素材や食べ物を焼いて、使えるアイテムを増やせるよ。'],
+      [/機織り機|旗/, '色や模様を組み合わせて、家族だけの目印を作れるよ。'],
+      [/石切台|階段|ハーフブロック/, '建築ブロックの形を増やして、屋根や壁を工夫できるよ。'],
+      [/地図|コンパス|座標/, '見つけた場所を記録し、次の探索へつなげられるよ。'],
+      [/畑|小麦|ニンジン|ジャガイモ|カボチャ|スイカ/, '食材を拠点で増やし、料理や動物のお世話に使えるよ。'],
+      [/赤ちゃん|仲良く|名前/, '動物との暮らしが広がり、牧場の楽しみが増えるよ。'],
+      [/花|染料|羊毛|ガラス|カーペット/, '色を使った旗、内装、庭づくりへ進めるよ。'],
+      [/村|取引/, '村人との取引で、地上でも新しい道具や素材を集められるよ。'],
+      [/洞窟|鉱|鉄|銅|金|ダイヤ|アメジスト|硫黄|辰砂/, '新しい道具や建築材料を作る選択肢が増えるよ。'],
+      [/海|川|魚|釣り|船|ボート|水槽/, '水辺の移動、料理、飾りづくりを楽しめるよ。'],
+      [/家|拠点|部屋|屋根|橋|温室|ベランダ|花壇|小道/, '拠点をもっと便利で自分たちらしい場所に広げられるよ。'],
+      [/盾|防具|松明|手すり|柵|壁|ベッド/, '探索や建築を落ち着いて続けるための基本が身につくよ。']
+    ];
+    const match = rules.find(([pattern]) => pattern.test(title));
+    if (match) return match[1];
+    return {
+      つくる: '新しいクラフトや建築へ進むための道具が増えるよ。',
+      あつめる: '集めた素材をクラフト、料理、飾りに活用できるよ。',
+      みつける: '世界の特徴が分かり、次に探したい場所が増えるよ。',
+      そだてる: '拠点で食べ物や動物との暮らしを広げられるよ。',
+      かざる: '家族のワールドを、もっと好きな見た目にできるよ。',
+      まもる: 'ハードコアで長く暮らすための基本が身につくよ。'
+    }[category];
+  }
+
+  function preparationFor(title, safety) {
+    if (safety !== SAFETY.C) return [];
+    if (/硫黄洞窟|硫黄ブロック|辰砂/.test(title)) return [
+      '吐き気効果に備え、長居せず戻る時間を決める。',
+      '硫黄のトゲなどの落下物に備えて、頭上も確認する。',
+      '地下Mobに備えて、盾、防具、食料、松明をそろえる。'
+    ];
+    if (/海底|水中|沈没船/.test(title)) return ['水中呼吸の残りを確認する。', '岸かボートへすぐ戻れる距離で探す。'];
+    if (/洞窟|鉱|ダイヤ|レッドストーン/.test(title)) return ['盾、防具、食料、松明をそろえる。', '真下掘りをせず、落下と地下Mobに注意する。'];
+    if (/ポータル|寺院/.test(title)) return ['感圧板や溶岩へ近づかず、外側から確認する。', '盾、防具、食料をそろえる。'];
+    return ['盾、防具、食料、明かりを確認し、危なくなったら早めに戻る。'];
+  }
+
+  function tagsFor(title, category) {
+    const tags = [category];
+    if (/赤ちゃん|牛|ヒツジ|ブタ|ニワトリ|ウマ|ロバ|ネコ|オオカミ|カメ|ミツバチ|ヤギ|キツネ|ラクダ|パンダ/.test(title)) tags.push('動物');
+    if (/花|染料|羊毛|色|旗|ガラス/.test(title)) tags.push('色');
+    if (/家|拠点|部屋|屋根|橋|花壇|庭|建物/.test(title)) tags.push('建築');
+    if (/洞窟|村|バイオーム|海|森|島|寺院|遺跡/.test(title)) tags.push('探索');
+    return [...new Set(tags)];
+  }
+
+  function rows(prefix, category, _icon, text) {
+    return text.trim().split('\n').map((line, index) => {
+      const parts = line.split('|');
+      return {
+        id: `${prefix}-${String(index + 1).padStart(3, '0')}`,
+        category,
+        title: parts[0].trim(),
+        hint: parts[1].trim(),
+        safety: SAFETY[parts[2] || 'A'],
+        phase: PHASE[parts[3] || '2']
+      };
+    });
+  }
+
+  const RAW_CATALOG = [
+    ...rows('make', 'つくる', '🔨', `
+作業台をつくる|原木を板材にして、4枚を四角く並べよう|A|1
+かまどをつくる|丸石を8個、真ん中を空けて並べよう|A|1
+チェストをつくる|板材8枚で大切なものの置き場所をつくろう|A|1
+3人分のベッドをそろえる|羊毛と板材を集め、夜を越す準備をしよう|A|1
+3人分の盾をつくる|板材と鉄インゴットで、とっさの守りを用意しよう|A|1
+樽をつくる|狭い場所でも開けられる収納を試してみよう|A|1
+燻製器をつくる|食べ物をすばやく焼ける台所設備をつくろう|A|2
+溶鉱炉をつくる|鉱石をすばやく精錬できる設備をつくろう|A|2
+機織り機をつくる|糸と板材で旗の模様づくりを始めよう|A|2
+製図台をつくる|紙と板材で地図を整える台をつくろう|A|2
+石切台をつくる|石と鉄で建築ブロックを加工する台をつくろう|A|2
+書見台をつくる|本棚とハーフブロックで読書台をつくろう|A|2
+コンポスターをつくる|植物の余りを骨粉に変える箱をつくろう|A|2
+砥石をつくる|道具を直したり付魔を外したりする台をつくろう|A|2
+鍛冶台をつくる|道具を強くするための仕事台を用意しよう|A|3
+金床をつくる|鉄を集め、道具の修理や名付けに使おう|A|3
+大釜をつくる|鉄を使って水や染色に役立つ設備をつくろう|A|2
+植木鉢を4個つくる|レンガを焼いて、小さな植物の飾り場所をつくろう|A|2
+ランタンを4個つくる|鉄塊と松明で温かな明かりをつくろう|A|2
+ろうそくを3色つくる|糸とハニカムを使い、染料で色を変えよう|A|3
+額縁をつくる|棒と革で思い出の品を飾れるようにしよう|A|2
+防具立てをつくる|棒と滑らかな石のハーフブロックを使おう|A|2
+地図をつくる|紙とコンパスを使って周りの地形を記録しよう|A|2
+コンパスをつくる|鉄とレッドストーンで方角を知る道具をつくろう|A|2
+時計をつくる|金とレッドストーンで地下でも時間を確かめよう|A|3
+望遠鏡をつくる|銅とアメジストの欠片で遠くを見てみよう|A|3
+釣り竿を3本つくる|棒と糸で、3人そろって釣りを楽しもう|A|1
+リードを3本そろえる|行商人との取引やクラフトで動物の移動に備えよう|A|2
+バケツを3個つくる|鉄インゴットで水やミルクを運べるようにしよう|A|1
+ボートを3そうつくる|板材で水の上を移動する乗り物をそろえよう|A|1
+紙をつくる|サトウキビを横に並べて紙にしてみよう|A|1
+本を3冊つくる|紙と革を合わせて本をつくろう|A|2
+本棚を4個つくる|本と板材で読書コーナーの材料をそろえよう|A|2
+ケーキをつくる|牛乳、卵、砂糖、小麦を集めてごちそうをつくろう|A|2
+パンを4個つくる|小麦を育て、旅にも持てる食料をつくろう|A|1
+クッキーをつくる|小麦とカカオ豆でおやつをつくろう|A|3
+パンプキンパイをつくる|カボチャ、砂糖、卵で秋のおやつをつくろう|A|2
+キノコシチューをつくる|赤と茶色のキノコをおわんに入れよう|A|2
+怪しげなシチューをつくる|花の種類で効果が変わる料理を試そう|B|3
+色付きガラスを3色つくる|ガラス8個の中央に染料を置いて色を付けよう|A|2
+3人のオリジナル旗をつくる|紫、黒、水色を使ってそれぞれの旗を考えよう|A|3
+銅ブロックでトランペット音を鳴らす|銅ブロックの上に音符ブロックを置いて鳴らそう|A|3
+レッドストーンランプを光らせる|レバーなどで電気のように明かりを操作しよう|A|3
+ホッパーをつくる|鉄とチェストでアイテムを移す道具をつくろう|A|3
+ピストンをつくる|木、丸石、鉄、レッドストーンを組み合わせよう|A|3
+レールを4本つくる|鉄と棒でトロッコの道をつくろう|A|3
+トロッコを3台つくる|鉄インゴットをU字に並べて乗り物をつくろう|A|3
+避雷針をつくる|銅インゴットで雷を受ける場所を決めよう|A|2
+金のタンポポをつくる|タンポポと金塊で赤ちゃんの成長を止める花をつくろう|A|3
+名札をクラフトする|紙と好きな金属の塊で名札をつくろう|A|2
+`),
+    ...rows('collect', 'あつめる', '🎒', `
+原木を4種類集める|森の違いを楽しみながら少しずつ持ち帰ろう|A|1
+苗木を4種類集める|葉が自然に消えるのを待って苗木を拾おう|A|1
+丸石を集める|階段坑道づくりと一緒に集めよう|A|1
+石炭を集める|松明と燃料に使える黒い鉱石を探そう|B|1
+鉄インゴットを集める|洞窟の入口付近から無理せず集めよう|B|1
+銅インゴットを集める|建築や望遠鏡に使える橙色の鉱石を集めよう|B|2
+金インゴットを集める|深い場所へ行く前に装備と帰る時間を決めよう|C|3
+レッドストーンを集める|深い地下で足元を照らしながら探そう|C|3
+ラピスラズリを集める|青く光る鉱石を見つけて持ち帰ろう|B|2
+エメラルドを3個手に入れる|村人との取引なら地上で安全に集められるよ|A|2
+ダイヤモンドを3個見つける|真下掘りをせず、鉄以上のツルハシを用意しよう|C|3
+アメジストの欠片を集める|芽が出るブロックを壊さず成長を待とう|B|3
+粘土玉を集める|川底の灰色のかたまりをシャベルで集めよう|B|2
+レンガを焼く|粘土玉をかまどで焼いて建築材料にしよう|A|2
+砂と赤い砂を集める|砂浜と荒野の色の違いを比べよう|B|3
+砂利と火打石を集める|砂利を掘り、時々出る火打石も拾おう|B|2
+赤い花を3種類集める|ポピー、赤色のチューリップ、バラの低木を探そう。ほかの赤い花でもOKだよ|A|1
+黄色い花を2種類集める|タンポポとヒマワリを昼間に探そう|A|1
+青・紫系の花を3種類集める|ヤグルマギク、アリウム、ライラックを探そう|A|2
+白い花を3種類集める|フランスギク、スズラン、白色のチューリップを探そう|A|2
+背の高い花を4種類集める|ヒマワリ、ライラック、バラの低木、ボタンを集めよう|A|2
+染料を4色そろえる|赤色、黄色、青色、紫色を花などから作ろう。ほかの色でもOKだよ|A|2
+羊毛を4色そろえる|白色、黒色、紫色、空色をハサミで集めよう。ほかの色でもOKだよ|A|2
+小麦を集める|畑で育て、収穫したら種を植え直そう|A|2
+ニンジンを集める|村の畑などで見つけたら植え直して増やそう|A|2
+ジャガイモを集める|村の畑などで見つけたら植え直して増やそう|A|2
+カボチャを集める|平原などで見つけ、種にして拠点でも育てよう|A|2
+スイカを集める|ジャングルなどで見つけ、種にして拠点でも育てよう|B|3
+カカオ豆を集める|ジャングルの幹に付いた実を集めよう|B|3
+魚を3種類集める|タラ、サケ、熱帯魚を釣りやバケツで集めよう|A|2
+卵を集める|ニワトリが落とした卵を囲いの中で拾おう|A|2
+牛乳を3杯くむ|バケツを持って牛からミルクを分けてもらおう|A|2
+砂糖をつくる|サトウキビをクラフトして料理に備えよう|A|2
+ハチミツ入りの瓶を3本集める|焚き火の煙を巣に当ててから採取しよう|B|3
+ハニカムを集める|満たされたハチの巣の下に焚き火を置こう|B|3
+石材を4種類集める|石、花崗岩、閃緑岩、安山岩を集めよう|A|2
+チェストの中を素材の種類ごとに整理する|看板や額縁を使うと、必要な物を見つけやすいよ|A|2
+硫黄ブロックを集める|硫黄洞窟では装備、食料、明かりを確認しよう|C|4
+辰砂ブロックを集める|赤いブロックを集め、硫黄の黄色と比べよう|C|4
+硫黄のトゲを4個集める|頭上から落ちることがあるので真下を避けよう|C|4
+`),
+    ...rows('find', 'みつける', '🧭', `
+平原バイオームを見つける|見通しがよく、最初の拠点にも向いた場所だよ|A|1
+森林バイオームを見つける|木材と苗木を集めやすい緑の森を探そう|A|1
+シラカバの森を見つける|白い幹が並ぶ明るい森を昼間に歩こう|A|2
+サクラの林を見つける|桃色の花びらが舞う山の斜面を探そう|B|3
+花の森を見つける|たくさんの花が咲く場所を地図に記録しよう|A|2
+ヒマワリ平原を見つける|ヒマワリが同じ方向を向く平原を探そう|A|2
+砂漠を見つける|食料とベッドを持ち、昼間に探索しよう|B|3
+サバンナを見つける|アカシアの木と乾いた草原を目印にしよう|B|3
+タイガを見つける|トウヒと甘いベリーがある森を探そう|B|3
+雪原を見つける|革のブーツがあると粉雪でも歩きやすいよ|B|3
+沼地を見つける|水路とハスの葉が多い場所を昼間に探そう|B|3
+マングローブの沼地を見つける|根が広がる木と泥の地面を見つけよう|B|3
+海岸を見つける|カメやサトウキビを探しながら歩こう|A|2
+草原の村を見つける|鐘と家が集まる場所を昼間に訪ねよう|A|2
+砂漠の村を見つける|暑い地域の家と畑の違いを見てみよう|B|3
+砂漠の寺院を外から確認する|床の中央を掘らず、まず建物の形を観察しよう|C|3
+沈没船を見つける|岸から見える船を探し、息の残りに注意しよう|B|3
+宝の地図を見つける|沈没船などのチェストを無理せず確認しよう|B|3
+埋もれた宝を見つける|地図の印に近づき、砂浜を少しずつ掘ろう|B|3
+イグルーを見つける|雪原で白い小さな建物を探そう|B|3
+荒廃したポータルを見つける|溶岩に近づかず外側から形を確かめよう|C|3
+トレイル遺跡を見つける|地面から見える色付きブロックを目印にしよう|B|4
+海底遺跡を船の上から見つける|海へ潜らず、暗視や望遠鏡も活用しよう|B|4
+鍾乳洞を見つける|尖った鍾乳石とつらら石を目印に、入口から観察しよう|C|3
+アメジストジオードを見つける|方解石と滑らかな玄武岩の層を目印にしよう|C|3
+キノコ島を見つける|敵対Mobが自然発生しにくい珍しい島を船から探そう|B|4
+硫黄の泉を地上で見つける|黄色と赤のブロック、泡、ガスを遠くから探そう|B|4
+硫黄洞窟を見つける|硫黄の泉の下へ、装備と帰り道を整えて進もう|C|4
+硫黄キューブを見つける|硫黄洞窟で跳ねる小さなキューブを観察しよう|C|4
+ジャングルを見つける|背の高い木、ツタ、カカオの実を目印に探そう|B|3
+`),
+    ...rows('grow', 'そだてる', '🌱', `
+小麦畑をつくる|水から4マス以内を耕して種を植えよう|A|1
+ニンジン畑をつくる|収穫したら一部を必ず植え直そう|A|2
+ジャガイモ畑をつくる|明るい場所で数を少しずつ増やそう|A|2
+ビートルート畑をつくる|村などで種を見つけて赤い畑を育てよう|A|3
+カボチャ畑をつくる|茎の隣に実ができる空きマスを残そう|A|2
+スイカ畑をつくる|茎の横を空けて甘い実を育てよう|A|3
+サトウキビ畑をつくる|水に接した土や砂へ並べて植えよう|A|1
+木を4種類育てる|苗木の上に空間を取り、種類を比べよう|A|2
+花いっぱいの庭をつくる|色が散らばるように花を植えてみよう|A|2
+植木鉢に花を4種類植える|部屋ごとに違う小さな花を飾ろう|A|2
+牛の赤ちゃんを誕生させる|大人の牛2頭へ小麦をあげよう|A|2
+ヒツジの赤ちゃんを誕生させる|大人のヒツジ2頭へ小麦をあげよう|A|2
+ブタの赤ちゃんを誕生させる|大人のブタ2頭へニンジンをあげよう|A|2
+ニワトリの赤ちゃんを誕生させる|種をあげるか卵を投げて待ってみよう|A|2
+ウマの赤ちゃんを誕生させる|手なずけた2頭へ金の食べ物を用意しよう|B|4
+ロバの赤ちゃんを誕生させる|手なずけた2頭を広い柵の中で育てよう|B|4
+ネコの赤ちゃんを誕生させる|手なずけた2匹へ生の魚をあげよう|A|3
+オオカミの赤ちゃんを誕生させる|手なずけた2匹へ十分な肉をあげよう|B|3
+カメの赤ちゃんを見守る|海岸を照らして囲い、卵から生まれるのを待とう|B|4
+ウーパールーパーの赤ちゃんを誕生させる|熱帯魚入りバケツを2匹に使おう|B|4
+ミツバチの赤ちゃんを誕生させる|巣の近くで2匹に花をあげよう|B|3
+ヤギの赤ちゃんを誕生させる|落下しない広い柵で2頭に小麦をあげよう|B|4
+キツネの赤ちゃんを誕生させる|スイートベリーを持ち、静かに近づこう|B|4
+ラクダの赤ちゃんを誕生させる|広い場所で2頭にサボテンをあげよう|B|4
+パンダの赤ちゃんを見つける|ジャングルで親子のパンダを離れた場所から探そう|B|4
+赤ちゃんMobに名前を付ける|クラフトした名札を金床で名付けて使おう|A|3
+金のタンポポで赤ちゃんの成長を止める|お気に入りの赤ちゃんへ花を使い、粒子を見よう|A|3
+オオカミの群れを見つける|タイガなどでオオカミを昼間に探そう|B|3
+村でネコを見つける|村の家や畑の近くを静かに探そう|A|3
+ミツバチの巣を見つける|花の多い場所で木の幹を見上げて探そう|A|3
+`),
+    ...rows('decorate', 'かざる', '🎨', `
+家に名前を付ける|看板を置いて3人で家の名前を考えよう|A|1
+玄関にひさしを付ける|階段やハーフブロックで雨よけをつくろう|A|2
+窓に色付きガラスを使う|部屋のテーマに合う色を1色選ぼう|A|2
+床にカーペットを敷く|羊毛の色を組み合わせて模様をつくろう|A|2
+キッチン風の部屋をつくる|かまど、樽、大釜を家具のように並べよう|A|2
+ダイニングをつくる|階段とフェンスで机とイスを表現しよう|A|2
+3人分の寝室を飾る|紫、黒、水色をそれぞれの目印にしよう|A|2
+地図を壁に飾る|額縁を並べて冒険した範囲を見えるようにしよう|A|3
+防具立ての衣装コーナーをつくる|3体並べて家族の装備を飾ろう|A|3
+窓辺に植木鉢を飾る|トラップドアと植木鉢で小さな棚をつくろう|A|2
+レンガの花壇をつくる|レンガの階段やハーフブロックで花を囲もう|A|2
+庭に小道をつくる|土の道、砂利、苔などを混ぜて自然に見せよう|A|2
+小さな池をつくる|深さを1マスにし、周りを柵や明かりで整えよう|A|2
+川に橋を1本つくる|幅を取り、両側へ落下防止の柵を付けよう|A|3
+牧場にかわいい入口をつくる|ゲート、看板、花で動物ごとの入口を飾ろう|A|2
+ランタンの街灯を4本立てる|夜でも歩ける間隔で道沿いに明かりを置こう|A|3
+好きな色の部屋をつくる|同系色を3種類ほど選ぶとまとまりやすいよ|A|3
+本棚の読書コーナーをつくる|イス、ランタン、書見台を小さくまとめよう|A|2
+暖炉風の飾りをつくる|火を使わず、たき火やランタンで安全に表現しよう|A|3
+水槽をつくる|ガラスで水が漏れない箱を作り、魚を泳がせよう|A|3
+2階建ての家をつくる|階段で上下をつなぎ、2階にも窓と明かりを置こう|A|3
+温室をつくる|ガラスと明かりで小さな植物部屋をつくろう|A|3
+水色の噴水をつくる|水があふれない受け皿を先につくろう|A|3
+階段ブロックで屋根をつくる|同じ向きに階段を並べ、端に軒を出してみよう|A|3
+ベランダをつくる|家の外へ床を張り、柵と明かりを付けよう|A|3
+硫黄または辰砂を使った小さな建物をつくる|壁、床、屋根のどこかに新しい素材を使おう|B|4
+硫黄レンガの小さな壁をつくる|新しい黄色のブロックを階段と組み合わせよう|B|4
+辰砂の赤い屋根をつくる|階段とハーフブロックで段差を付けよう|B|4
+3人の記念像をつくる|公式キャラクターではなく家族の印をブロックで表そう|A|5
+100日の記念広場を完成させる|旗、花、思い出の品を集めて3人で仕上げよう|A|5
+`),
+    ...rows('protect', 'まもる', '🛡️', `
+初日の仮拠点を完成させる|壁、屋根、ドア、松明、ベッドをそろえよう|A|1
+拠点の暗い場所をなくす|床の明るさを見ながら松明をすき間なく置こう|A|1
+拠点を柵か壁で囲う|入口はゲートにし、角にも明かりを置こう|A|1
+鉄装備を3人分そろえる|ヘルメットからブーツまで名前を付けて分けよう|B|2
+盾と食料を3人分そろえる|すぐ取れるチェストに同じ数ずつ入れよう|A|1
+階段坑道をつくる|真下に掘らず、高さ2ブロックを確保して松明を置こう|B|2
+高い場所に手すりを付ける|橋、階段、屋上の端をフェンスで囲おう|A|2
+拠点の座標を記録する|設定で座標を表示し、看板や本へ3つの数字を書こう|A|1
+木炭を集める|原木をかまどで焼き、石炭が少ない時の燃料にしよう|A|1
+火打石を集める|砂利を掘ると、ときどき出てくるよ|A|2
+骨粉を集める|骨をクラフトするか、コンポスターから取り出そう|A|2
+カカオ豆を集める|ジャングルの木の幹に付く茶色い実を探そう|B|3
+雪玉を集める|雪の積もった地面をシャベルで掘ろう|A|3
+氷を集める|シルクタッチの道具を用意して凍った場所で採ろう|B|4
+サトウキビを集める|川や海岸の水辺に生える緑の植物を探そう|A|1
+方解石を集める|アメジストジオードの白い層を少しだけ採ろう|B|3
+荒野バイオームを見つける|赤い砂と色の層になった丘を目印にしよう|B|4
+竹林を見つける|ジャングルで高い竹が密集した場所を探そう|B|4
+繁茂した洞窟を見つける|ツツジの木や垂れ根を手がかりに地下を探そう|C|4
+凍った海を見つける|氷山が並ぶ海を岸や船から探そう|B|4
+`)
+  ];
+
+  const CATEGORY_OVERRIDES = Object.freeze({
+    'decorate-020': 'つくる', 'decorate-021': 'つくる', 'decorate-024': 'つくる', 'decorate-026': 'つくる',
+    'decorate-027': 'つくる', 'decorate-028': 'つくる', 'decorate-029': 'つくる', 'decorate-030': 'つくる',
+    'grow-009': 'つくる', 'grow-010': 'つくる',
+    'grow-023': 'みつける', 'grow-024': 'みつける', 'grow-025': 'みつける', 'grow-028': 'みつける', 'grow-029': 'みつける', 'grow-030': 'みつける',
+    'protect-009': 'あつめる', 'protect-010': 'あつめる', 'protect-011': 'あつめる', 'protect-012': 'あつめる',
+    'protect-013': 'あつめる', 'protect-014': 'あつめる', 'protect-015': 'あつめる', 'protect-016': 'あつめる',
+    'protect-017': 'みつける', 'protect-018': 'みつける', 'protect-019': 'みつける', 'protect-020': 'みつける'
+  });
+  const TARGET_TYPES = Object.freeze({ つくる: '作成', あつめる: '収集', みつける: '発見', そだてる: '育成', かざる: '装飾', まもる: '安全確保' });
+
+  const CATALOG = Object.freeze(RAW_CATALOG.map((source) => {
+    const category = CATEGORY_OVERRIDES[source.id] || source.category;
+    const emoji = emojiFor(source.title, category);
+    const quantityMatch = source.title.match(/([1-4])(?:個|色|種類|枚|本|台|冊|杯|そう|体|頭|匹)/);
+    return Object.freeze({
+      ...source,
+      category,
+      emoji,
+      icon: emoji,
+      description: source.hint,
+      tags: Object.freeze(tagsFor(source.title, category)),
+      stage: source.phase,
+      safetyLevel: source.safety,
+      targetType: TARGET_TYPES[category],
+      ...(quantityMatch ? { quantityTarget: Number(quantityMatch[1]) } : {}),
+      completionCriteria: `「${source.title}」をゲーム内で達成し、家族で確認する。`,
+      unlocks: unlocksFor(source.title, category),
+      preparation: Object.freeze(preparationFor(`${source.title} ${source.hint}`, source.safety)),
+      prerequisiteIds: Object.freeze([]),
+      relatedIds: Object.freeze([]),
+      edition: '統合版',
+      versionNote: /金のタンポポ|名札をクラフト|硫黄|辰砂/.test(source.title) ? '2026年正式リリース対応' : '統合版正式リリース',
+      releaseStatus: '正式版'
+    });
+  }));
+
+  function createDefaultState() {
+    const progress = {};
+    const goals = [];
+    const dayNotes = {};
+    return {
+      app: APP_ID,
+      schemaVersion: 1,
+      started: false,
+      currentDay: 1,
+      progress,
+      goals,
+      favorites: [],
+      dayNotes,
+      world: { title: 'ほのそうパパワールド', currentDay: 1, startedAt: '', dayNotes },
+      players: PLAYERS.map((player) => ({ ...player })),
+      achievementDefinitions: CATALOG.map((item) => ({ ...item, tags: [...item.tags], preparation: [...item.preparation], prerequisiteIds: [...item.prerequisiteIds], relatedIds: [...item.relatedIds] })),
+      achievementProgress: progress,
+      todayGoals: goals,
+      unlockedTitles: [],
+      settings: { sound: true, reducedMotion: false, largeText: false },
+      updatedAt: ''
+    };
+  }
+
+  function clone(value) {
+    return JSON.parse(JSON.stringify(value));
+  }
+
+  function normalizeState(input) {
+    const base = createDefaultState();
+    if (!input || typeof input !== 'object') return base;
+    const ids = new Set(CATALOG.map((item) => item.id));
+    const progress = {};
+    const incomingProgress = isPlainObject(input.progress) ? input.progress : isPlainObject(input.achievementProgress) ? input.achievementProgress : {};
+    if (isPlainObject(incomingProgress)) {
+      Object.keys(incomingProgress).forEach((id) => {
+        const record = incomingProgress[id];
+        if (ids.has(id) && record && typeof record === 'object' && typeof record.completed === 'boolean') {
+          progress[id] = {
+            ...record,
+            completed: record.completed,
+            day: Math.max(1, Math.min(100, Number(record.day) || 1)),
+            players: Array.isArray(record.players) ? record.players.filter((idValue) => PLAYERS.some((p) => p.id === idValue)) : [],
+            note: typeof record.note === 'string' ? record.note.slice(0, 500) : '',
+            completedAt: typeof record.completedAt === 'string' ? record.completedAt : new Date().toISOString()
+          };
+        }
+      });
+    }
+    const currentDay = Math.max(1, Math.min(100, Number(input.currentDay ?? input.world?.currentDay) || 1));
+    const goalsInput = Array.isArray(input.goals) ? input.goals : Array.isArray(input.todayGoals) ? input.todayGoals : [];
+    const goals = [...new Set(goalsInput.filter((id) => ids.has(id)))].slice(0, 5);
+    const dayNotes = isPlainObject(input.dayNotes) ? input.dayNotes : isPlainObject(input.world?.dayNotes) ? input.world.dayNotes : {};
+    const incomingDefinitions = Array.isArray(input.achievementDefinitions) ? input.achievementDefinitions : [];
+    const achievementDefinitions = CATALOG.map((item) => {
+      const incoming = incomingDefinitions.find((definition) => definition?.id === item.id);
+      return { ...(isPlainObject(incoming) ? incoming : {}), ...item, tags: [...item.tags], preparation: [...item.preparation], prerequisiteIds: [...item.prerequisiteIds], relatedIds: [...item.relatedIds] };
+    });
+    const incomingPlayers = Array.isArray(input.players) ? input.players : [];
+    return {
+      ...input,
+      ...base,
+      ...input,
+      app: APP_ID,
+      schemaVersion: 1,
+      started: Boolean(input.started),
+      currentDay,
+      progress,
+      goals,
+      favorites: Array.isArray(input.favorites) ? [...new Set(input.favorites.filter((id) => ids.has(id)))] : [],
+      dayNotes,
+      world: { ...base.world, ...(isPlainObject(input.world) ? input.world : {}), title: typeof input.world?.title === 'string' ? input.world.title : base.world.title, currentDay, startedAt: typeof input.world?.startedAt === 'string' ? input.world.startedAt : '', dayNotes },
+      players: PLAYERS.map((player) => ({ ...player, ...(isPlainObject(incomingPlayers.find((candidate) => candidate?.id === player.id)) ? incomingPlayers.find((candidate) => candidate.id === player.id) : {}), id: player.id })),
+      achievementDefinitions,
+      achievementProgress: progress,
+      todayGoals: goals,
+      unlockedTitles: Array.isArray(input.unlockedTitles) ? input.unlockedTitles.filter((title) => typeof title === 'string') : [],
+      settings: {
+        ...base.settings,
+        ...(isPlainObject(input.settings) ? input.settings : {}),
+        sound: input.settings?.sound !== false,
+        reducedMotion: Boolean(input.settings?.reducedMotion),
+        largeText: Boolean(input.settings?.largeText)
+      },
+      updatedAt: typeof input.updatedAt === 'string' ? input.updatedAt : ''
+    };
+  }
+
+  function synchronizeAliases(state) {
+    return {
+      ...state,
+      world: { ...state.world, currentDay: state.currentDay, dayNotes: state.dayNotes },
+      achievementProgress: state.progress,
+      todayGoals: state.goals
+    };
+  }
+
+  function withUpdate(state, patch) {
+    return synchronizeAliases({ ...state, ...patch, updatedAt: new Date().toISOString() });
+  }
+
+  function changeDay(state, amount) {
+    const next = Math.max(1, Math.min(100, Number(state.currentDay) + Number(amount || 0)));
+    return withUpdate(state, { currentDay: next });
+  }
+
+  function completeActivity(state, id, players, note, completedAt) {
+    if (!CATALOG.some((item) => item.id === id)) return state;
+    const previous = state.progress[id];
+    return withUpdate(state, {
+      progress: {
+        ...state.progress,
+        [id]: {
+          completed: true,
+          day: state.currentDay,
+          players: Array.isArray(players) ? [...new Set(players)].filter((value) => PLAYERS.some((p) => p.id === value)) : [],
+          note: typeof note === 'string' ? note.trim().slice(0, 500) : '',
+          completedAt: completedAt || previous?.completedAt || new Date().toISOString()
+        }
+      }
+    });
+  }
+
+  function uncompleteActivity(state, id) {
+    const record = state.progress[id];
+    if (!record) return state;
+    return withUpdate(state, { progress: { ...state.progress, [id]: { ...record, completed: false } } });
+  }
+
+  function toggleGoal(state, id) {
+    if (!CATALOG.some((item) => item.id === id)) return { ok: false, reason: 'missing', state };
+    if (state.goals.includes(id)) {
+      return { ok: true, state: withUpdate(state, { goals: state.goals.filter((value) => value !== id) }) };
+    }
+    if (state.goals.length >= 5) return { ok: false, reason: 'limit', state };
+    return { ok: true, state: withUpdate(state, { goals: [...state.goals, id] }) };
+  }
+
+  function toggleFavorite(state, id) {
+    if (!CATALOG.some((item) => item.id === id)) return state;
+    const favorites = state.favorites.includes(id) ? state.favorites.filter((value) => value !== id) : [...state.favorites, id];
+    return withUpdate(state, { favorites });
+  }
+
+  function filterActivities(catalog, state, filters) {
+    const query = String(filters?.query || '').trim().toLocaleLowerCase('ja');
+    const category = filters?.category || 'all';
+    const status = filters?.status || 'all';
+    return catalog.filter((item) => {
+      const done = state.progress[item.id]?.completed === true;
+      if (category !== 'all' && item.category !== category) return false;
+      if (status === 'done' && !done) return false;
+      if (status === 'open' && done) return false;
+      if (status === 'goal' && !state.goals.includes(item.id)) return false;
+      if (status === 'favorite' && !state.favorites.includes(item.id)) return false;
+      if (query && !`${item.title} ${item.hint} ${item.category}`.toLocaleLowerCase('ja').includes(query)) return false;
+      return true;
+    });
+  }
+
+  function saveState(storage, state) {
+    try {
+      storage.setItem(STORAGE_KEY, JSON.stringify(normalizeState(state)));
+      return true;
+    } catch (_error) {
+      return false;
+    }
+  }
+
+  function loadState(storage) {
+    return loadStateResult(storage).state;
+  }
+
+  function isPlainObject(value) {
+    return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+  }
+
+  function validateState(input) {
+    if (!isPlainObject(input) || input.app !== APP_ID || input.schemaVersion !== 1 || typeof input.started !== 'boolean') return false;
+    if (!Number.isInteger(input.currentDay) || input.currentDay < 1 || input.currentDay > 100) return false;
+    if (!isPlainObject(input.progress) || !Array.isArray(input.goals) || (input.favorites !== undefined && !Array.isArray(input.favorites))) return false;
+    if (!isPlainObject(input.dayNotes) || !isPlainObject(input.settings) || typeof input.updatedAt !== 'string') return false;
+    if (typeof input.settings.sound !== 'boolean' || typeof input.settings.reducedMotion !== 'boolean' || typeof input.settings.largeText !== 'boolean') return false;
+    if (input.world !== undefined && (!isPlainObject(input.world) || typeof input.world.title !== 'string'
+      || !Number.isInteger(input.world.currentDay) || input.world.currentDay < 1 || input.world.currentDay > 100
+      || typeof input.world.startedAt !== 'string' || !isPlainObject(input.world.dayNotes))) return false;
+    if (input.players !== undefined && (!Array.isArray(input.players) || input.players.length !== 3
+      || input.players.some((player) => !isPlainObject(player) || typeof player.id !== 'string' || typeof player.name !== 'string' || typeof player.color !== 'string'))) return false;
+    if (input.achievementDefinitions !== undefined && (!Array.isArray(input.achievementDefinitions)
+      || input.achievementDefinitions.some((definition) => !isPlainObject(definition) || typeof definition.id !== 'string'
+        || typeof definition.emoji !== 'string' || typeof definition.title !== 'string' || typeof definition.description !== 'string'
+        || typeof definition.category !== 'string' || !Array.isArray(definition.tags) || typeof definition.stage !== 'string'
+        || typeof definition.safetyLevel !== 'string' || typeof definition.targetType !== 'string'
+        || typeof definition.completionCriteria !== 'string' || typeof definition.hint !== 'string' || typeof definition.unlocks !== 'string'
+        || !Array.isArray(definition.prerequisiteIds) || !Array.isArray(definition.relatedIds) || typeof definition.edition !== 'string'
+        || typeof definition.versionNote !== 'string' || typeof definition.releaseStatus !== 'string'
+        || (definition.quantityTarget !== undefined && (!Number.isInteger(definition.quantityTarget) || definition.quantityTarget < 1 || definition.quantityTarget > 4))))) return false;
+    if (input.achievementProgress !== undefined && !isPlainObject(input.achievementProgress)) return false;
+    if (input.todayGoals !== undefined && !Array.isArray(input.todayGoals)) return false;
+    if (input.unlockedTitles !== undefined && (!Array.isArray(input.unlockedTitles) || input.unlockedTitles.some((title) => typeof title !== 'string'))) return false;
+    const ids = new Set(CATALOG.map((item) => item.id));
+    if (input.goals.length > 5 || input.goals.some((id) => !ids.has(id)) || new Set(input.goals).size !== input.goals.length) return false;
+    if (input.favorites?.some((id) => !ids.has(id)) || (input.favorites && new Set(input.favorites).size !== input.favorites.length)) return false;
+    return Object.entries(input.progress).every(([id, record]) => ids.has(id) && isPlainObject(record)
+      && typeof record.completed === 'boolean' && Number.isInteger(record.day) && record.day >= 1 && record.day <= 100
+      && Array.isArray(record.players) && record.players.every((player) => PLAYERS.some((candidate) => candidate.id === player))
+      && typeof record.note === 'string' && record.note.length <= 500 && typeof record.completedAt === 'string');
+  }
+
+  function loadStateResult(storage) {
+    let raw;
+    try {
+      raw = storage.getItem(STORAGE_KEY);
+    } catch (_error) {
+      return { state: createDefaultState(), error: 'unavailable', raw: null };
+    }
+    if (!raw) return { state: createDefaultState(), error: null, raw: null };
+    try {
+      const parsed = JSON.parse(raw);
+      if (!validateState(parsed)) return { state: createDefaultState(), error: 'corrupt', raw };
+      return { state: normalizeState(parsed), error: null, raw: null };
+    } catch (_error) {
+      return { state: createDefaultState(), error: 'corrupt', raw };
+    }
+  }
+
+  function createBackup(state) {
+    return JSON.stringify({ app: APP_ID, schemaVersion: 1, exportedAt: new Date().toISOString(), state: normalizeState(state) }, null, 2);
+  }
+
+  function parseBackup(text) {
+    try {
+      const parsed = JSON.parse(text);
+      if (!parsed || parsed.app !== APP_ID || !parsed.state || parsed.schemaVersion !== 1) return { ok: false, reason: 'format' };
+      if (!validateState(parsed.state)) return { ok: false, reason: 'state' };
+      return { ok: true, state: normalizeState(parsed.state) };
+    } catch (_error) {
+      return { ok: false, reason: 'json' };
+    }
+  }
+
+  function getStats(state) {
+    const done = Object.values(state.progress).filter((record) => record.completed === true).length;
+    return { done, total: CATALOG.length, percent: Math.round((done / CATALOG.length) * 100) };
+  }
+
+  function isIncomingNewer(current, incoming) {
+    const currentTime = Date.parse(current?.updatedAt || '') || 0;
+    const incomingTime = Date.parse(incoming?.updatedAt || '') || 0;
+    return incomingTime > currentTime;
+  }
+
+  const core = Object.freeze({
+    APP_ID,
+    STORAGE_KEY,
+    RECOVERY_KEY_PREFIX,
+    PLAYERS,
+    buildCatalog: () => CATALOG.slice(),
+    createDefaultState,
+    normalizeState,
+    changeDay,
+    completeActivity,
+    uncompleteActivity,
+    toggleGoal,
+    toggleFavorite,
+    filterActivities,
+    saveState,
+    loadState,
+    loadStateResult,
+    validateState,
+    createBackup,
+    parseBackup,
+    getStats,
+    isIncomingNewer
+  });
+  globalThis.HonoTrackerCore = core;
+
+  if (typeof document === 'undefined') return;
+
+  const $ = (selector, parent = document) => parent.querySelector(selector);
+  const $$ = (selector, parent = document) => Array.from(parent.querySelectorAll(selector));
+  const config = typeof CONFIG !== 'undefined' ? CONFIG : {
+    appTitle: 'ほのそうパパワールド★マスター・オブ・マインクラフト',
+    mainColor: '#5d3a9b',
+    backgroundColor: '#f4ecd8'
+  };
+  const ui = { view: 'home', query: '', category: 'all', status: 'all', detailId: null, dialogOpener: null, resetArmed: false };
+  const initialLoad = loadStateResult(globalThis.localStorage);
+  let state = initialLoad.state;
+  let pendingRecoveryRaw = initialLoad.raw;
+  let storageIssue = initialLoad.error;
+  let storageHealthy = !storageIssue;
+
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
+  }
+
+  function renderStorageAlert() {
+    const alert = $('#storage-alert');
+    if (alert) alert.hidden = storageHealthy;
+    const status = $('#save-status');
+    if (status) {
+      status.textContent = storageHealthy ? '● 保存済み' : '⚠ 保存できていません';
+      status.classList.toggle('save-error', !storageHealthy);
+    }
+  }
+
+  function saveRecoverySnapshot(text) {
+    try {
+      globalThis.localStorage.setItem(`${RECOVERY_KEY_PREFIX}${new Date().toISOString()}`, String(text));
+      return true;
+    } catch (_error) {
+      return false;
+    }
+  }
+
+  function persist() {
+    if (pendingRecoveryRaw !== null) {
+      if (!saveRecoverySnapshot(pendingRecoveryRaw)) {
+        storageHealthy = false;
+        storageIssue = 'recovery-failed';
+        renderStorageAlert();
+        return false;
+      }
+      pendingRecoveryRaw = null;
+    }
+    storageHealthy = saveState(globalThis.localStorage, state);
+    storageIssue = storageHealthy ? null : 'save-failed';
+    renderStorageAlert();
+    return storageHealthy;
+  }
+
+  function setState(next) {
+    state = withUpdate(next, {});
+    persist();
+    applySettings();
+  }
+
+  function applySettings() {
+    document.documentElement.classList.toggle('large-text', state.settings.largeText);
+    document.documentElement.classList.toggle('reduce-motion', state.settings.reducedMotion);
+  }
+
+  function playTone(kind) {
+    if (!state.settings.sound) return;
+    try {
+      const AudioContext = globalThis.AudioContext || globalThis.webkitAudioContext;
+      if (!AudioContext) return;
+      const context = new AudioContext();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.type = kind === 'complete' ? 'triangle' : 'sine';
+      oscillator.frequency.setValueAtTime(kind === 'complete' ? 523 : 392, context.currentTime);
+      if (kind === 'complete') oscillator.frequency.exponentialRampToValueAtTime(784, context.currentTime + 0.18);
+      gain.gain.setValueAtTime(0.0001, context.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.12, context.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.28);
+      oscillator.connect(gain).connect(context.destination);
+      oscillator.start();
+      oscillator.stop(context.currentTime + 0.3);
+      oscillator.addEventListener('ended', () => context.close());
+    } catch (_error) {
+      // Sound is optional; the app remains fully usable without Web Audio.
+    }
+  }
+
+  function toast(message) {
+    const element = $('#toast');
+    if (!element) return;
+    element.textContent = message;
+    element.classList.add('show');
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => element.classList.remove('show'), 2600);
+  }
+
+  function celebrate(id) {
+    if (state.settings.reducedMotion) return;
+    $$(`.quest-card[data-id="${id}"]`).forEach((card) => {
+      card.querySelector('.card-sparkles')?.remove();
+      const sparkles = document.createElement('span');
+      sparkles.className = 'card-sparkles';
+      sparkles.setAttribute('aria-hidden', 'true');
+      sparkles.innerHTML = '<i>✦</i><i>★</i><i>✦</i>';
+      card.appendChild(sparkles);
+      card.classList.add('quest-celebrate');
+      setTimeout(() => { card.classList.remove('quest-celebrate'); sparkles.remove(); }, 850);
+    });
+  }
+
+  function playerBadges(ids) {
+    const selected = ids?.length ? ids : PLAYERS.map((player) => player.id);
+    return selected.map((id) => {
+      const player = PLAYERS.find((candidate) => candidate.id === id);
+      return player ? `<span class="mini-player" style="--player:${player.color}" title="${player.name}">${player.icon}</span>` : '';
+    }).join('');
+  }
+
+  function safetyClass(label) {
+    if (label === SAFETY.C) return 'safety-high';
+    if (label === SAFETY.B) return 'safety-mid';
+    return 'safety-low';
+  }
+
+  function progressBar(value, label) {
+    return `<div class="bar-wrap" aria-label="${escapeHtml(label)} ${value}%"><div class="bar"><span style="width:${value}%"></span></div><b>${value}%</b></div>`;
+  }
+
+  function activityCard(item, compact = false) {
+    const record = state.progress[item.id];
+    const done = record?.completed === true;
+    const goal = state.goals.includes(item.id);
+    const favorite = state.favorites.includes(item.id);
+    return `<article class="quest-card ${done ? 'is-done' : ''} ${compact ? 'compact' : ''}" data-id="${item.id}">
+      <button class="quest-check" data-action="complete" data-id="${item.id}" aria-label="${done ? '未達成に戻す' : '達成にする'}: ${escapeHtml(item.title)}" aria-pressed="${done}">${done ? '✓' : ''}</button>
+      <div class="quest-main">
+        <span class="quest-icon" aria-hidden="true">${item.emoji}</span>
+        <span class="quest-copy"><span class="quest-title">${escapeHtml(item.title)}</span><span class="quest-meta"><em class="safety ${safetyClass(item.safety)}">${escapeHtml(item.safety)}</em><small>${escapeHtml(item.phase)}</small></span></span>
+        ${done ? `<span class="card-players">${playerBadges(record.players)}</span>` : ''}
+        <button class="hint-button" data-action="hint" data-id="${item.id}" aria-label="ヒント: ${escapeHtml(item.title)}"><span aria-hidden="true">💡</span>ヒント</button>
+      </div>
+      <div class="card-side-actions"><button class="goal-star ${goal ? 'active' : ''}" data-action="goal" data-id="${item.id}" aria-label="${goal ? '今日の目標から外す' : '今日の目標に入れる'}" aria-pressed="${goal}">★</button><button class="favorite-heart ${favorite ? 'active' : ''}" data-action="favorite" data-id="${item.id}" aria-label="${favorite ? 'お気に入りから外す' : 'お気に入りに入れる'}: ${escapeHtml(item.title)}" aria-pressed="${favorite}">♥</button></div>
+    </article>`;
+  }
+
+  function renderHeader() {
+    const stats = getStats(state);
+    const day = $('#header-day');
+    const score = $('#header-score');
+    if (day) day.textContent = `${state.currentDay}日目`;
+    if (score) score.textContent = `${stats.done}/${stats.total}`;
+  }
+
+  function updateDayUI() {
+    renderHeader();
+    $$('[data-day-number]').forEach((element) => { element.textContent = state.currentDay; });
+    $$('[data-day-progress]').forEach((element) => { element.style.width = `${state.currentDay}%`; });
+    $$('.day-progress').forEach((element) => { element.setAttribute('aria-valuenow', String(state.currentDay)); });
+  }
+
+  function updateProgressUI() {
+    renderHeader();
+    const stats = getStats(state);
+    const ring = $('[data-overall-ring]');
+    if (ring) ring.style.setProperty('--progress', `${stats.percent * 3.6}deg`);
+    const percent = $('[data-overall-percent]');
+    const count = $('[data-overall-count]');
+    const message = $('[data-overall-message]');
+    if (percent) percent.textContent = `${stats.percent}%`;
+    if (count) count.textContent = `${stats.done}/${stats.total}達成`;
+    if (message) message.textContent = stats.done < 20 ? '最初の一歩を楽しもう！' : stats.done < 100 ? 'ワールドがどんどん豊かになっているよ。' : stats.done < 200 ? '家族のマスターまであと少し！' : '200個すべて達成！すごい！';
+    $$('[data-category-summary]').forEach((tile) => {
+      const category = tile.dataset.categorySummary;
+      const items = CATALOG.filter((item) => item.category === category);
+      const done = items.filter((item) => state.progress[item.id]?.completed === true).length;
+      const value = Math.round(done / items.length * 100);
+      const small = $('small', tile);
+      const bar = $('.bar span', tile);
+      const label = $('.bar-wrap b', tile);
+      if (small) small.textContent = `${done}/${items.length}`;
+      if (bar) bar.style.width = `${value}%`;
+      if (label) label.textContent = `${value}%`;
+      $('.bar-wrap', tile)?.setAttribute('aria-label', `${category} ${value}%`);
+    });
+    const recommendations = $('[data-recommended-list]');
+    if (recommendations) recommendations.innerHTML = recommended().map((item) => activityCard(item, true)).join('') || '<div class="empty-state">🎉 おすすめを全部達成したよ！</div>';
+    const recentSection = $('[data-recent-section]');
+    if (recentSection) recentSection.innerHTML = recentMarkup();
+  }
+
+  function updateActivityUI(id, restoreAction) {
+    const item = CATALOG.find((candidate) => candidate.id === id);
+    if (!item) return;
+    const cards = $$(`.quest-card[data-id="${id}"]`);
+    cards.forEach((card) => {
+      if (card.closest('.board-list') && !filterActivities([item], state, ui).length) {
+        card.remove();
+        return;
+      }
+      const template = document.createElement('template');
+      template.innerHTML = activityCard(item, card.classList.contains('compact')).trim();
+      card.replaceWith(template.content.firstElementChild);
+    });
+    updateProgressUI();
+    const resultCount = $('[data-result-count]');
+    if (resultCount && ui.view === 'board') resultCount.textContent = String(filterActivities(CATALOG, state, ui).length);
+    const boardList = $('.board-list');
+    if (boardList && !boardList.querySelector('.quest-card') && !filterActivities(CATALOG, state, ui).length) {
+      boardList.innerHTML = '<div class="empty-state"><span>🔎</span><b>見つからなかったよ</b><p>検索する言葉や絞り込みを変えてみよう。</p><button data-action="clear-filter" class="primary-button small">条件をもどす</button></div>';
+    }
+    if (restoreAction) {
+      const restored = $(`.quest-card[data-id="${id}"] [data-action="${restoreAction}"]`);
+      const fallback = ui.view === 'board' ? $('#board-title') : $('[data-recommended-heading]');
+      (restored || fallback)?.focus({ preventScroll: true });
+    }
+  }
+
+  function recommended() {
+    const safe = CATALOG.filter((item) => state.progress[item.id]?.completed !== true && item.safety !== SAFETY.C && !state.goals.includes(item.id));
+    const goals = state.goals.map((id) => CATALOG.find((item) => item.id === id)).filter(Boolean).filter((item) => state.progress[item.id]?.completed !== true);
+    const mixed = [...goals, ...safe];
+    const seenCategories = new Set();
+    const picked = [];
+    for (const item of mixed) {
+      if (picked.length >= 3) break;
+      if (!seenCategories.has(item.category) || picked.length > 1) {
+        picked.push(item);
+        seenCategories.add(item.category);
+      }
+    }
+    return picked;
+  }
+
+  function recentMarkup() {
+    const recent = Object.entries(state.progress)
+      .filter(([, record]) => record.completed === true)
+      .sort((a, b) => String(b[1].completedAt).localeCompare(String(a[1].completedAt)))
+      .slice(0, 3)
+      .map(([id]) => CATALOG.find((item) => item.id === id))
+      .filter(Boolean);
+    return recent.length ? `<div class="section-heading"><div><p class="eyebrow">MEMORIES</p><h2>最近のできた！</h2></div></div><div class="quest-stack">${recent.map((item) => activityCard(item, true)).join('')}</div>` : '';
+  }
+
+  function renderHome() {
+    const stats = getStats(state);
+    const categoryStats = ['つくる', 'あつめる', 'みつける', 'そだてる', 'かざる', 'まもる'].map((category) => {
+      const items = CATALOG.filter((item) => item.category === category);
+      const done = items.filter((item) => state.progress[item.id]?.completed === true).length;
+      return `<button class="category-tile" data-jump-category="${category}" data-category-summary="${category}"><span>${items[0].emoji}</span><b>${category}</b><small>${done}/${items.length}</small>${progressBar(Math.round(done / items.length * 100), category)}</button>`;
+    }).join('');
+    return `<section class="view home-view" aria-labelledby="home-title">
+      <div class="day-hero paper-card">
+        <div><p class="eyebrow">ハードコア100日チャレンジ</p><h1 id="home-title">家族のわくわく冒険ひろば</h1><p>今日も、できることをひとつ増やそう。</p></div>
+        <div class="day-panel"><div class="day-control" aria-label="ゲーム内日数"><button data-action="day-minus" aria-label="1日戻す">−</button><div><strong data-day-number>${state.currentDay}</strong><span>日目 / 100日</span></div><button data-action="day-plus" aria-label="1日進める">＋</button></div><div class="day-progress" role="progressbar" aria-label="100日までの進み具合" aria-valuemin="1" aria-valuemax="100" aria-valuenow="${state.currentDay}"><span data-day-progress style="width:${state.currentDay}%"></span></div></div>
+      </div>
+      <div class="dashboard-grid">
+        <article class="paper-card overall-card"><div class="progress-ring" data-overall-ring style="--progress:${stats.percent * 3.6}deg"><div><strong data-overall-percent>${stats.percent}%</strong><span data-overall-count>${stats.done}/${stats.total}達成</span></div></div><div><h2>冒険の進み具合</h2><p data-overall-message>${stats.done < 20 ? '最初の一歩を楽しもう！' : stats.done < 100 ? 'ワールドがどんどん豊かになっているよ。' : stats.done < 200 ? '家族のマスターまであと少し！' : '200個すべて達成！すごい！'}</p></div></article>
+        <article class="paper-card family-card"><h2>3人のチーム</h2><div class="family-row">${PLAYERS.map((player) => `<div class="family-member" style="--player:${player.color}"><span>${player.icon}</span><b>${player.name}</b></div>`).join('')}</div><p>競争ではなく、3人でひとつのワールドを育てます。</p></article>
+      </div>
+      <div class="section-heading"><div><p class="eyebrow">NEXT QUEST</p><h2 data-recommended-heading tabindex="-1">次におすすめ</h2></div><button data-view="board" class="text-button">全部見る →</button></div>
+      <div class="quest-stack" data-recommended-list>${recommended().map((item) => activityCard(item, true)).join('') || '<div class="empty-state">🎉 おすすめを全部達成したよ！</div>'}</div>
+      <div class="section-heading"><div><p class="eyebrow">ADVENTURE MAP</p><h2>6つの冒険エリア</h2></div></div>
+      <div class="category-grid">${categoryStats}</div>
+      <div data-recent-section>${recentMarkup()}</div>
+    </section>`;
+  }
+
+  function renderBoard() {
+    const items = filterActivities(CATALOG, state, ui);
+    const categoryOptions = ['all', 'つくる', 'あつめる', 'みつける', 'そだてる', 'かざる', 'まもる'];
+    return `<section class="view" aria-labelledby="board-title">
+      <div class="page-title"><div><p class="eyebrow">200 ADVENTURES</p><h1 id="board-title" tabindex="-1">進捗ボード</h1><p>つくる、あつめる、みつける。気になる冒険を選ぼう。</p></div><div class="result-count"><strong data-result-count>${items.length}</strong><span>件</span></div></div>
+      <div class="filter-panel paper-card">
+        <label class="search-box"><span>⌕</span><input id="quest-search" type="search" value="${escapeHtml(ui.query)}" placeholder="例：花、赤ちゃん、ガラス" aria-label="進捗を検索"></label>
+        <div class="chip-scroll" aria-label="カテゴリ">${categoryOptions.map((category) => `<button class="filter-chip ${ui.category === category ? 'active' : ''}" data-filter-category="${category}" aria-pressed="${ui.category === category}">${category === 'all' ? 'すべて' : category}</button>`).join('')}</div>
+        <div class="segmented" aria-label="達成状態">${[['all', '全部'], ['open', 'これから'], ['done', 'できた'], ['goal', '今日の目標'], ['favorite', 'お気に入り']].map(([value, label]) => `<button class="${ui.status === value ? 'active' : ''}" data-filter-status="${value}" aria-pressed="${ui.status === value}">${label}</button>`).join('')}</div>
+      </div>
+      <div class="board-list" aria-live="polite">${items.map((item) => activityCard(item)).join('') || '<div class="empty-state"><span>🔎</span><b>見つからなかったよ</b><p>検索する言葉や絞り込みを変えてみよう。</p><button data-action="clear-filter" class="primary-button small">条件をもどす</button></div>'}</div>
+    </section>`;
+  }
+
+  function renderGoals() {
+    const goals = state.goals.map((id) => CATALOG.find((item) => item.id === id)).filter(Boolean);
+    return `<section class="view" aria-labelledby="goals-title"><div class="page-title"><div><p class="eyebrow">TODAY'S QUESTS</p><h1 id="goals-title">今日の目標</h1><p>一度に5個まで。欲ばらず、楽しく進めよう。</p></div><div class="result-count"><strong>${goals.length}</strong><span>/ 5</span></div></div>
+      <article class="tip-banner"><span>💡</span><p>進捗ボードの星を押すと、ここへ追加できます。</p></article>
+      <div class="quest-stack goals-stack">${goals.map((item) => activityCard(item)).join('') || '<div class="empty-state"><span>⭐</span><b>今日の目標はまだないよ</b><p>進捗ボードから、気になるものを選ぼう。</p><button data-view="board" class="primary-button small">進捗ボードへ</button></div>'}</div></section>`;
+  }
+
+  function renderMemories() {
+    const records = Object.entries(state.progress).filter(([, record]) => record.completed === true).sort((a, b) => String(b[1].completedAt).localeCompare(String(a[1].completedAt)));
+    return `<section class="view" aria-labelledby="memory-title"><div class="page-title"><div><p class="eyebrow">OUR MEMORIES</p><h1 id="memory-title">思い出アルバム</h1><p>3人で増やした「できた！」を振り返ろう。</p></div><div class="result-count"><strong>${records.length}</strong><span>個</span></div></div>
+      <div class="timeline">${records.map(([id, record]) => {
+        const item = CATALOG.find((candidate) => candidate.id === id);
+        if (!item) return '';
+        return `<article class="memory-card" data-id="${id}"><div class="memory-day"><strong>DAY ${record.day}</strong><span>${new Date(record.completedAt).toLocaleDateString('ja-JP')}</span></div><div class="memory-icon">${item.emoji}</div><div class="memory-copy"><h2>${escapeHtml(item.title)}</h2><div>${playerBadges(record.players)}</div>${record.note ? `<p>「${escapeHtml(record.note)}」</p>` : '<p class="muted">メモはまだありません</p>'}</div><button data-action="hint" data-id="${id}" aria-label="ヒントと記録を開く">💡</button></article>`;
+      }).join('') || '<div class="empty-state"><span>📖</span><b>最初の思い出をつくろう</b><p>進捗を達成すると、ここに記録されます。</p></div>'}</div></section>`;
+  }
+
+  function renderSettings() {
+    return `<section class="view" aria-labelledby="settings-title"><div class="page-title"><div><p class="eyebrow">SETTINGS</p><h1 id="settings-title">設定とデータ</h1><p>この端末に記録を保存しています。</p></div></div>
+      <div class="settings-grid">
+        <article class="paper-card settings-card"><h2>あそびやすさ</h2>
+          <label class="toggle-row"><span><b>効果音</b><small>できた！を音でお祝い</small></span><input type="checkbox" data-setting="sound" ${state.settings.sound ? 'checked' : ''}><i></i></label>
+          <label class="toggle-row"><span><b>動きを少なくする</b><small>スタンプや粒の動きを止める</small></span><input type="checkbox" data-setting="reducedMotion" ${state.settings.reducedMotion ? 'checked' : ''}><i></i></label>
+          <label class="toggle-row"><span><b>文字を大きくする</b><small>全体の文字を少し読みやすく</small></span><input type="checkbox" data-setting="largeText" ${state.settings.largeText ? 'checked' : ''}><i></i></label>
+        </article>
+        <article class="paper-card settings-card"><h2>バックアップ</h2><p>ブラウザのデータを消すと記録も消えます。ときどきファイルに保存してね。</p><div class="button-row"><button class="secondary-button" data-action="export">⇩ 保存する</button><button class="secondary-button" data-action="import">⇧ 復元する</button></div><input id="import-file" type="file" accept="application/json,.json" hidden><small id="save-status" class="save-label">${storageHealthy ? '● 保存済み' : '⚠ 保存できていません'}</small></article>
+        <article class="paper-card settings-card family-settings"><h2>家族カラー</h2>${PLAYERS.map((player) => `<div class="setting-player"><span style="--player:${player.color}">${player.icon}</span><b>${player.name}</b><i style="background:${player.color}"></i></div>`).join('')}</article>
+        <article class="paper-card settings-card danger-card"><h2>最初からやり直す</h2><p>達成、メモ、日数、今日の目標をすべて消します。</p><button class="danger-button" data-action="reset">${ui.resetArmed ? 'もう一度押すと初期化します' : 'データを初期化'}</button></article>
+      </div><p class="safety-note">🛡️ 安全度は遊び方を考えるための目安です。絶対の安全を保証するものではありません。装備や周囲を確認し、無理をせず楽しんでください。</p><p class="disclaimer">このアプリはMinecraft公式またはMojang Studios公認のサービスではありません。</p></section>`;
+  }
+
+  function renderView() {
+    const main = $('#main-content');
+    if (!main) return;
+    const renderers = { home: renderHome, board: renderBoard, goals: renderGoals, memories: renderMemories, settings: renderSettings };
+    main.innerHTML = (renderers[ui.view] || renderHome)();
+    $$('.nav-button').forEach((button) => {
+      const active = button.dataset.view === ui.view;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-current', active ? 'page' : 'false');
+    });
+    renderHeader();
+  }
+
+  function showApp() {
+    const start = $('#start-screen');
+    const shell = $('#app-shell');
+    if (start) start.hidden = true;
+    if (shell) shell.hidden = false;
+    ui.view = 'home';
+    renderView();
+    renderStorageAlert();
+    $('#main-content')?.focus({ preventScroll: true });
+  }
+
+  function showStart() {
+    const start = $('#start-screen');
+    const shell = $('#app-shell');
+    if (shell) shell.hidden = true;
+    if (start) start.hidden = false;
+    const button = $('#start-button');
+    if (button) button.innerHTML = state.started ? '<span>▶</span> つづきから' : '<span>★</span> 冒険をはじめる';
+  }
+
+  function quickComplete(id) {
+    const item = CATALOG.find((candidate) => candidate.id === id);
+    if (!item) return;
+    const previous = state.progress[id];
+    if (previous?.completed === true) {
+      setState(uncompleteActivity(state, id));
+      toast('「これから」に戻しました');
+    } else {
+      setState(completeActivity(
+        state,
+        id,
+        previous?.players?.length ? previous.players : PLAYERS.map((player) => player.id),
+        previous?.note || '',
+        previous?.completedAt || new Date().toISOString()
+      ));
+      playTone('complete');
+      toast(`できた！ ${item.title}`);
+    }
+    updateActivityUI(id, 'complete');
+    if (state.progress[id]?.completed === true) celebrate(id);
+  }
+
+  function openDetail(id, opener) {
+    const item = CATALOG.find((candidate) => candidate.id === id);
+    if (!item) return;
+    ui.detailId = id;
+    ui.dialogOpener = opener || document.activeElement;
+    const record = state.progress[id];
+    const done = record?.completed === true;
+    const dialog = $('#quest-dialog');
+    if (!dialog) return;
+    dialog.setAttribute('aria-labelledby', 'dialog-title');
+    dialog.innerHTML = `<form class="dialog-card" data-detail-form>
+      <button type="button" class="dialog-close" data-action="close-dialog" aria-label="閉じる">×</button>
+      <div class="dialog-hero"><span aria-hidden="true">${item.emoji}</span><div><p>${item.category}・${item.phase}</p><h2 id="dialog-title">${escapeHtml(item.title)}</h2></div></div>
+      <div class="dialog-body"><span class="safety ${safetyClass(item.safety)}">${escapeHtml(item.safety)}</span><section class="hint-section"><h3>🧭 やってみよう</h3><p>${escapeHtml(item.hint)}</p></section><section class="unlock-section"><h3>✨ できるようになること</h3><p>${escapeHtml(item.unlocks)}</p></section>${item.preparation.length ? `<section class="prepare-section"><h3>🛡️ 準備と注意</h3><ul>${item.preparation.map((tip) => `<li>${escapeHtml(tip)}</li>`).join('')}</ul></section>` : ''}
+        <h3>だれと達成した？</h3><div class="player-select">${PLAYERS.map((player) => `<label style="--player:${player.color}"><input type="checkbox" name="players" value="${player.id}" ${(record?.players?.includes(player.id) || (!record && true)) ? 'checked' : ''}><span>${player.icon}<b>${player.name}</b></span></label>`).join('')}</div>
+        <label class="note-field"><b>思い出メモ</b><textarea name="note" maxlength="500" placeholder="どんなことがあった？">${escapeHtml(record?.note || '')}</textarea></label>
+      </div><div class="dialog-actions">${done ? `<button type="button" class="danger-link" data-action="uncomplete-detail">未達成に戻す</button>` : '<span></span>'}<button type="submit" class="primary-button">${done ? '記録を保存' : 'できた！にする'}</button></div>
+    </form>`;
+    if (typeof dialog.showModal === 'function') dialog.showModal(); else dialog.setAttribute('open', '');
+    $('.dialog-close', dialog)?.focus({ preventScroll: true });
+  }
+
+  function closeDialog(restoreFocus = true) {
+    const dialog = $('#quest-dialog');
+    if (!dialog) return;
+    if (typeof dialog.close === 'function' && dialog.open) dialog.close(); else dialog.removeAttribute('open');
+    const opener = ui.dialogOpener;
+    ui.detailId = null;
+    ui.dialogOpener = null;
+    if (restoreFocus && opener?.isConnected) opener.focus({ preventScroll: true });
+  }
+
+  function saveDetail(form) {
+    const id = ui.detailId;
+    if (!id) return;
+    const players = $$('input[name="players"]:checked', form).map((input) => input.value);
+    const note = $('textarea[name="note"]', form)?.value || '';
+    const existing = state.progress[id];
+    const timestamp = existing?.completedAt || new Date().toISOString();
+    setState(completeActivity(state, id, players.length ? players : PLAYERS.map((player) => player.id), note, timestamp));
+    closeDialog(false);
+    playTone('complete');
+    toast('思い出を保存しました');
+    updateActivityUI(id, 'hint');
+    celebrate(id);
+  }
+
+  function showRecoveryDialog() {
+    if (pendingRecoveryRaw === null) return;
+    const dialog = $('#recovery-dialog');
+    if (!dialog) return;
+    dialog.innerHTML = `<div class="dialog-card recovery-card"><div class="dialog-hero"><span aria-hidden="true">🧰</span><div><p>SAVE DATA RECOVERY</p><h2 id="recovery-title">記録を守るために確認してね</h2></div></div><div class="dialog-body"><p>このブラウザの保存データを正しく読めませんでした。勝手に上書きせず、どうするか選べます。</p><div class="recovery-options"><button type="button" class="secondary-button" data-action="download-corrupt">⇩ 壊れたデータを保存</button><button type="button" class="primary-button" data-action="import-corrupt-backup">⇧ バックアップから復元</button><button type="button" class="danger-button" data-action="discard-corrupt">新しい記録で始める</button></div><small>迷ったら、まず「壊れたデータを保存」を押してから、バックアップを復元してください。</small></div></div>`;
+    if (typeof dialog.showModal === 'function') dialog.showModal(); else dialog.setAttribute('open', '');
+    $('[data-action="download-corrupt"]', dialog)?.focus({ preventScroll: true });
+  }
+
+  function closeRecoveryDialog() {
+    const dialog = $('#recovery-dialog');
+    if (!dialog) return;
+    if (typeof dialog.close === 'function' && dialog.open) dialog.close(); else dialog.removeAttribute('open');
+  }
+
+  function downloadCorruptData() {
+    if (pendingRecoveryRaw === null) return;
+    try {
+      const blob = new Blob([pendingRecoveryRaw], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = `ほのそうパパワールド_読めなかった保存データ_${new Date().toISOString().slice(0, 10)}.txt`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      toast('読めなかったデータを保存しました');
+    } catch (_error) {
+      toast('データを保存できませんでした');
+    }
+  }
+
+  function exportData() {
+    try {
+      const blob = new Blob([createBackup(state)], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = `ほのそうパパワールド_バックアップ_DAY${state.currentDay}.json`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      toast('バックアップを保存しました');
+    } catch (_error) {
+      toast('バックアップを保存できませんでした');
+    }
+  }
+
+  function importData(file, recoveryMode = false) {
+    if (!file || file.size > 2_000_000) {
+      toast('2MB以下のバックアップを選んでください');
+      return;
+    }
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      const parsed = parseBackup(String(reader.result));
+      if (!parsed.ok) {
+        toast('このファイルは復元できません');
+        return;
+      }
+      const snapshot = recoveryMode ? pendingRecoveryRaw : createBackup(state);
+      if (snapshot === null || !saveRecoverySnapshot(snapshot)) {
+        storageHealthy = false;
+        storageIssue = 'recovery-failed';
+        renderStorageAlert();
+        toast('現在の記録を保護できないため、復元を中止しました');
+        return;
+      }
+      if (recoveryMode) pendingRecoveryRaw = null;
+      setState({ ...parsed.state, started: true });
+      if (recoveryMode) closeRecoveryDialog();
+      toast('バックアップを復元しました');
+      if (recoveryMode) showApp(); else renderView();
+    });
+    reader.addEventListener('error', () => toast('ファイルを読めませんでした'));
+    reader.readAsText(file);
+  }
+
+  function onClick(event) {
+    if (event.target.matches?.('#quest-dialog')) {
+      closeDialog();
+      return;
+    }
+    const button = event.target.closest('button');
+    if (!button) return;
+    if (button.id === 'start-button') {
+      if (pendingRecoveryRaw !== null) {
+        showRecoveryDialog();
+        return;
+      }
+      setState({ ...state, started: true, world: { ...state.world, startedAt: state.world?.startedAt || new Date().toISOString() } });
+      playTone('start');
+      showApp();
+      return;
+    }
+    if (button.dataset.view) {
+      ui.view = button.dataset.view;
+      ui.resetArmed = false;
+      renderView();
+      globalThis.scrollTo?.({ top: 0, behavior: state.settings.reducedMotion ? 'auto' : 'smooth' });
+      return;
+    }
+    if (button.dataset.jumpCategory) {
+      ui.category = button.dataset.jumpCategory;
+      ui.status = 'all';
+      ui.query = '';
+      ui.view = 'board';
+      renderView();
+      return;
+    }
+    if (button.dataset.filterCategory) {
+      ui.category = button.dataset.filterCategory;
+      renderView();
+      return;
+    }
+    if (button.dataset.filterStatus) {
+      ui.status = button.dataset.filterStatus;
+      renderView();
+      return;
+    }
+    const action = button.dataset.action;
+    if (action === 'complete') quickComplete(button.dataset.id);
+    if (action === 'hint') openDetail(button.dataset.id, button);
+    if (action === 'close-dialog') closeDialog();
+    if (action === 'goal') {
+      const result = toggleGoal(state, button.dataset.id);
+      if (!result.ok && result.reason === 'limit') toast('今日の目標は5個までです');
+      else { setState(result.state); playTone('tap'); updateActivityUI(button.dataset.id, 'goal'); }
+    }
+    if (action === 'favorite') {
+      setState(toggleFavorite(state, button.dataset.id));
+      playTone('tap');
+      updateActivityUI(button.dataset.id, 'favorite');
+    }
+    if (action === 'day-minus' || action === 'day-plus') {
+      const before = state.currentDay;
+      setState(changeDay(state, action === 'day-plus' ? 1 : -1));
+      if (before === state.currentDay) toast(state.currentDay === 1 ? '1日目がスタートです' : '100日目がゴールです');
+      else playTone('tap');
+      updateDayUI();
+    }
+    if (action === 'clear-filter') {
+      Object.assign(ui, { query: '', category: 'all', status: 'all' });
+      renderView();
+    }
+    if (action === 'uncomplete-detail') {
+      const id = ui.detailId;
+      setState(uncompleteActivity(state, id));
+      closeDialog(false);
+      toast('「これから」に戻しました');
+      updateActivityUI(id, 'hint');
+    }
+    if (action === 'download-corrupt') downloadCorruptData();
+    if (action === 'import-corrupt-backup') $('#recovery-import-file')?.click();
+    if (action === 'discard-corrupt') {
+      if (pendingRecoveryRaw === null || !saveRecoverySnapshot(pendingRecoveryRaw)) {
+        toast('元のデータを保護できないため、まだ新しく始められません');
+        return;
+      }
+      pendingRecoveryRaw = null;
+      state = createDefaultState();
+      persist();
+      closeRecoveryDialog();
+      showStart();
+      toast('新しい記録を始められます');
+    }
+    if (action === 'export') exportData();
+    if (action === 'retry-save') {
+      toast(persist() ? '記録を保存しました' : 'まだ保存できません。バックアップも利用してください');
+    }
+    if (action === 'import') $('#import-file')?.click();
+    if (action === 'reset') {
+      if (!ui.resetArmed) {
+        ui.resetArmed = true;
+        renderView();
+        toast('もう一度押すと、すべて初期化します');
+        setTimeout(() => { ui.resetArmed = false; }, 6000);
+      } else {
+        state = createDefaultState();
+        persist();
+        ui.resetArmed = false;
+        showStart();
+        toast('データを初期化しました');
+      }
+    }
+  }
+
+  function onInput(event) {
+    if (event.target.id === 'quest-search') {
+      ui.query = event.target.value;
+      const selectionStart = event.target.selectionStart;
+      renderView();
+      const input = $('#quest-search');
+      input?.focus();
+      input?.setSelectionRange(selectionStart, selectionStart);
+    }
+  }
+
+  function onChange(event) {
+    const setting = event.target.dataset.setting;
+    if (setting) {
+      setState({ ...state, settings: { ...state.settings, [setting]: event.target.checked } });
+      if (setting === 'sound' && event.target.checked) playTone('tap');
+      renderView();
+    }
+    if (event.target.id === 'import-file') importData(event.target.files?.[0]);
+    if (event.target.id === 'recovery-import-file') importData(event.target.files?.[0], true);
+  }
+
+  function init() {
+    document.title = config.appTitle;
+    applySettings();
+    document.addEventListener('click', onClick);
+    document.addEventListener('input', onInput);
+    document.addEventListener('change', onChange);
+    $('#recovery-dialog')?.addEventListener('cancel', (event) => event.preventDefault());
+    document.addEventListener('submit', (event) => {
+      if (event.target.matches('[data-detail-form]')) {
+        event.preventDefault();
+        saveDetail(event.target);
+      }
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeDialog();
+      if (event.key === '/' && ui.view === 'board' && !event.target.matches('input, textarea')) {
+        event.preventDefault();
+        $('#quest-search')?.focus();
+      }
+    });
+    globalThis.addEventListener?.('storage', (event) => {
+      if (event.key === STORAGE_KEY && event.newValue) {
+        try {
+          const incoming = JSON.parse(event.newValue);
+          if (!validateState(incoming)) return;
+          if (isIncomingNewer(state, incoming)) {
+            state = normalizeState(incoming);
+            renderView();
+            toast('別のタブの新しい変更を反映しました');
+          } else if (incoming.updatedAt !== state.updatedAt) {
+            const repaired = persist();
+            toast(repaired ? '別のタブには古い記録がありました。この画面の新しい記録を守りました' : '新しい記録を守りましたが、保存し直せませんでした');
+          }
+        } catch (_error) { /* ignore malformed external writes */ }
+      }
+    });
+    showStart();
+    if (pendingRecoveryRaw !== null) showRecoveryDialog();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
+  else init();
+}());
+  </script>
+</body>
+</html>
